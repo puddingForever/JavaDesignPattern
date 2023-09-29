@@ -1,4 +1,4 @@
-package depin;
+package solid.depin;
 
 //Formats Message to plain text
 public class TextFormatter implements Formatter{
