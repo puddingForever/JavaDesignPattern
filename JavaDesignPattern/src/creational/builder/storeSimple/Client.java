@@ -3,7 +3,7 @@ package creational.builder.storeSimple;
 import creational.builder.store.ClothingStore;
 import creational.builder.storeSimple.StoreDTO.StoreDTOBuilder;
 
-public class Client {
+public class Client { 
 	
 	public static void main(String[] args) {
 		ClothingStore store = createStore();
