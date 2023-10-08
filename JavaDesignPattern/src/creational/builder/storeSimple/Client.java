@@ -4,7 +4,7 @@ import creational.builder.store.ClothingStore;
 import creational.builder.storeSimple.StoreDTO.StoreDTOBuilder;
 
 public class Client { 
-	
+	 
 	public static void main(String[] args) {
 		ClothingStore store = createStore();
 		StoreDTO dto = directBuild(StoreDTO.getBuilder(),store);
