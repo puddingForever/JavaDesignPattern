@@ -270,10 +270,8 @@ public class Client {
 ### 빌더패턴을 더 쉽게 구현해보자 
 
 - Builder클라스를 결과물 객체 내부의 static inner class로 만들어서 더 간단하게 사용하기도 함
-  
-  ```java
 
-  //결과물 클래스
+```java
 public class StoreDTO {
 
 	private String name;
@@ -355,9 +353,7 @@ public class StoreDTO {
 	}
 }
 
-
-
-  ```
+```
 
 - setter를 private으로 줘서 외부에서 접근하지 못하고 오로지 객체 생성될때 빌더가 셋팅해주도록 해줌
 - 처음 예시에서는 DTO의 생성자에서 값을 설정해줬는데, 빌더객체를 inner class로 사용하니, DTO가 불변임과 동시에 빌더패턴을 사용하면서 값셋팅이 가능해져 더욱 편리하다.
@@ -372,6 +368,7 @@ public class StoreDTO {
 
 ### 빌더패턴을 사용하는 예시
 - StringBuilder 객체도 빌더패턴을 구현하여 구성되어있다 <br>
+
 ```java
 
  	StringBuilder sb = new StringBuilder();
@@ -382,6 +379,7 @@ public class StoreDTO {
 ```
 https://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html  <br>
 - 설명의 Method Detail을 보면, 빌더패턴으로 디자인되어있다 <br>
+
 ```java
 	public StringBuilder append(Object obj)
 ```
@@ -392,6 +390,7 @@ https://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html  <br>
 - Calendar 클래스를 구성하는 java.util.Calendar.Builder 클래스도 빌더패턴으로 구성되있다.
 - Calander 클래스를 사용하면 내가 원하는 Year,Month,Date 등등 아무 인자값이나 넣어서 값을 빼낼 수 있음
 - 이것을 가능하게 해준 것은 빌더패턴 덕분이다.
+
 ```java
     public static class Builder{ //Calendar 클래스의 inner 클래스로 구성되있음 
 	private static final int NFIEDS = FIELD_COUNT + 1;
