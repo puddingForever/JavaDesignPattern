@@ -28,7 +28,8 @@ new Book(),new Book("hi")로 인스턴스를 생성하는 것은 불가하며 �
 
 > 두번째 예시 <br>
 > 아래의 Me라는 객체의 인스턴스를 생성하기 위해서는 먼저 Nation이라는 객체와 Bank라는 객체를 생성한 후 , Bank라는 객체를 감싸고 있는 collection 객체도 생성해야만 함. <br>
-> 
+> Me라는 객체를 생성하기 위해 구성요소와 그 값들을 모두 만든 후 셋팅해야하는 번거로움이 있음
+
 ```java
 	class Me{
 		public Me(Nation nation,List<Bank> banks,String name){
@@ -37,7 +38,7 @@ new Book(),new Book("hi")로 인스턴스를 생성하는 것은 불가하며 �
 	}
 ```
 
-> 이 모든 과정이 불편하다고 느꼈다면 ..빌더패턴을 사용하면 간단하게 해결할 수 있음 ~! 
+> 이 모든 과정이 불편하다고 느꼈다면 ..빌더패턴을 사용하면 간단하게 해결할 수 있음 .
 
 ### 빌더(Builder)란 도대체 무엇인가?
 - 인스턴스 생성시 생성자의 형태에 따른 **생성순서의 규칙을 단순화** 해줌 
@@ -49,7 +50,7 @@ new Book(),new Book("hi")로 인스턴스를 생성하는 것은 불가하며 �
 
 1.Product (결과물) 
 - 내가 만들고자하는 최종 객체
-
+ 
 2.Builder 
 - Product(결과물)을 만들기위한 **구성요소들을 제공해주는 인터페이스**
 - 인스턴스를 생성시 필요 값만 개별적으로 셋팅할 수 있도록 해줌!
@@ -119,7 +120,11 @@ public class ClothingStoreDTO implements StoreDTO{
 ```
 
 - 옷가게DTO임. 가게이름(name),가게주인(owner),가게위치(city)가 들어있는 간단한 POJO(Plain Old Java Object)클래스
-
+- 최종 DTO의 경우 setter를 빼고 불변 클래스로 만들어주어야함
+- (빌더패턴을 사용하는 경우 코드의 안전성떄문에 객체는 불변으로 만들어주어야함
+- 예를 들어 Store의 이름을 H&M으로 인스턴스를 생성했다면 Nike로 변경할수는 없음. 새로운 인스턴스를 생성해야함
+- 이름이 H&M인 Store의 City를 서울로 설정하고 싶어도,추가가 아니라 새로운 인스턴스를 만들어서 생성하게 되는 것임 )  
+   
 2. 빌더 인터페이스를 만들어보자
 
 ```java
@@ -140,7 +145,7 @@ public class ClothingStoreDTO implements StoreDTO{
 ```
 
 - 인터페이스에 정의된 메소드는 메소드체이닝을 위하여 자기자신을 리턴하도록 설계함
-- build()라는 메소드가 있어야 진정한 빌더인터페이스 ~ StoreDTO는 최종결과물(ClothingStoreDTO)를 구현해주는 인터페이스임 (loose coupling을 위해서 이렇게 씀)
+-  StoreDTO는 최종결과물(ClothingStoreDTO)를 구현해주는 인터페이스임 (loose coupling을 위해서 이렇게 씀)
   
 3. Concrete Builder를 만들어보자(빌더인터페이스를 구현한 클래스)
 ```java
@@ -259,56 +264,178 @@ public class Client {
 }
 ```
 - 먼저 ClothingStore 엔티티를 만들어줌. setter로 값을 다 셋팅해주긴 했는데 안해두 됨 ~ 직접 director에 값을 넣어서 셋팅도 할 수 있음
-- Director라고 표신된 곳이 빌더패턴을 부르는 애임. 메소드 체이닝으로 값 셋팅을 해줌.
+- clothingStoreBuild() 메소드가 빌더패턴을 부르는 애임. 전문용어로는 Director라고 부름. 메소드 체이닝으로 값 셋팅을 해줌.
 - main메소드에서 빌더패턴을 사용하면 끝 !! 
 
 ### 빌더패턴을 더 쉽게 구현해보자 
 
-- 위의 예시는 클래스,인터페이스를 여러개 나눠서 빌더패턴을 사용했지만, 많은 개발자들은 Builder클라스를 결과물 객체 내부의 static inner class로 만들어서 사용해버림
-
+- Builder클라스를 결과물 객체 내부의 static inner class로 만들어서 더 간단하게 사용하기도 함
   
+  ```java
+
+  //결과물 클래스
+public class StoreDTO {
+
+	private String name;
+	
+	private String city;
+	
+	private String owner;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	private void setCity(String city) {
+		this.city = city;
+	}
+
+	private String getOwner() {
+		return owner;
+	}
+
+	private void setOwner(String owner) {
+		this.owner = owner;
+	}
+
+	@Override
+	public String toString() {
+		return "StoreDTO [name=" + name + ", city=" + city + ", owner=" + owner + "]";
+	}
+	
+	//builder instance 가져오기 
+	public static StoreDTOBuilder getBuilder() {
+		return new StoreDTOBuilder();
+	}
+	
+	//Builder inner class
+	public static class StoreDTOBuilder{
+		
+		private String name;
+		
+		private String city;
+		
+		private String owner;
+		
+		private StoreDTO storeDTO;
+		
+		
+		public StoreDTOBuilder withName(String name) {
+			this.name = name;
+			return this;
+		}
+		
+		public StoreDTOBuilder withCity(String city) {
+			this.city = city;
+			return this;
+		}
+		
+		public StoreDTOBuilder withOwner(String owner) {
+			this.owner = owner;
+			return this;
+		}
+		
+		//빌더 메소드 (구성요소 조립)
+		public StoreDTO build() {
+			this.storeDTO = new StoreDTO();
+			storeDTO.setName(name);
+			storeDTO.setCity(city);
+			storeDTO.setOwner(owner);
+			return this.storeDTO;
+			
+		}	
+	}
+}
 
 
 
+  ```
+
+- setter를 private으로 줘서 외부에서 접근하지 못하고 오로지 객체 생성될때 빌더가 셋팅해주도록 해줌
+- 처음 예시에서는 DTO의 생성자에서 값을 설정해줬는데, 빌더객체를 inner class로 사용하니, DTO가 불변임과 동시에 빌더패턴을 사용하면서 값셋팅이 가능해져 더욱 편리하다.
 
 
 
+### 빌더패턴 구현시 고려사항
+- Builder를 inner static class로 사용하면 더욱 쉽게 빌더패턴을 사용할 수 있음 <br>
+- Director는 인스턴스를 생성하는 Client 클라스에서 바로 불러야함  <br>
+- 만약 Builder를 이용해서 한가지의 타입의 객체만을 생성할 예정이라면, Builder를 인터페이스-구현클래스 형식으로 만들지 않아도 괜찮음  <br>
+- 생성자의 인자값이 너무 많다면 빌더패턴을 사용하기 좋은 케이스임  <br>
+
+### 빌더패턴을 사용하는 예시
+- StringBuilder 객체도 빌더패턴을 구현하여 구성되어있다 <br>
+```java
+
+ 	StringBuilder sb = new StringBuilder();
+	sb.append("java").append("javascript");
+	String str = sb.toString();
+	System.out.println(str); // javajavscript
+
+```
+https://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html  <br>
+- 설명의 Method Detail을 보면, 빌더패턴으로 디자인되어있다 <br>
+```java
+	public StringBuilder append(Object obj)
+```
+- (StringBuilder에 대해서는 String이 불변이라 메모리 할당을 줄이기 위해서만 사용하는 것으로 알고있었다.
+- 하지만 이 모든 것이 가능하게 해준 것은 **빌더패턴**이였던 것이였다.. !)
+- StringBuilder와 비슷한 예로 ByteBuffer,CharBuffer등이 있음 
+
+- Calendar 클래스를 구성하는 java.util.Calendar.Builder 클래스도 빌더패턴으로 구성되있다.
+- Calander 클래스를 사용하면 내가 원하는 Year,Month,Date 등등 아무 인자값이나 넣어서 값을 빼낼 수 있음
+- 이것을 가능하게 해준 것은 빌더패턴 덕분이다.
+```java
+    public static class Builder{ //Calendar 클래스의 inner 클래스로 구성되있음 
+	private static final int NFIEDS = FIELD_COUNT + 1;
+	private static final int WEEK_YEAR = FIELD_COUNT;
+
+	private long isntant;
+	private int[] fields;
+
+	....
+
+	// Calendar 인스턴스의 구성품을 셋팅하기위한 메소드 
+	public Builder setWeekDate(int weekYear,int weekOfYear,int dayOfWeek){
+		allocateFields();
+		inernalSet(WEEK_YEAR,weekYear);
+		internalSet(WEEK_OF_YEAR,weekOfYear);
+		internalSet(DAY_OF_WEEK, dayOfWeek);
+		return this;
+	}
+
+	//최종 부품들을 조립해서 완성품을 전달하는 메소드 
+	public Calender build(){
+		if(locale == null){
+			locale = locale.getDefault();
+		}
+
+		....
+	}
+
+   }
+
+```
 
 
- 
+### 최종요약 
 
+- 빌더패턴은 객체 생성시 여러 과정을 거쳐서 생성되도록 설계되있음  <br>
+- 생성자의 인자값을 하나하나 분리하여 설정하기 때문에 인자값이 많은 생성자를 사용할 때 개발자는 더욱 편하게 사용할 수 있음 <br>
 
+- ![image](https://github.com/puddingForever/JavaDesignPattern/assets/126591306/6f862b88-f30b-4304-9946-ba67a6bed525)
 
-
-
-
-
-
-
-
-
-
-
+- 빌더패턴은 크게 3개의 구성요소로 되어있음 <br>
+- **Product** : 최종결과물, Builder에서 만들어질 예정 <br>
+- **Builder** : 만드려는 객체의 구성요소를 읽어주는 메소드들이 있음 <br>
+- 구성요소들을 조립하여  최종 결과품들을 조립해주는 build() 메소드가 있음 <br>
+- Builder가 인터페이스나 추상클래스로 되어있다면 ConcreteBuilder로 구현해서 사용 <br>
+- **Director** : Builder 클래스를 사용하는 부분. 인스턴스를 생성하는 클래스에서 바로 사용함 <br>
   
-  
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
