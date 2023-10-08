@@ -26,7 +26,7 @@ new Book(),new Book("hi")로 인스턴스를 생성하는 것은 불가하며 �
 자바에서는 생성자의 이름이 아닌 타입을 검사하기 떄문에 String author와 String clientName의 값이 뒤바뀌어도 컴파일러 에러가 발생하지 않음. <br>
 
 
-> 인스턴스 생성시 불편한 객체 한개를 더 살펴봅시다. <br> 
+> 두번째 예시 <br>
 > 아래의 Me라는 객체의 인스턴스를 생성하기 위해서는 먼저 Nation이라는 객체와 Bank라는 객체를 생성한 후 , Bank라는 객체를 감싸고 있는 collection 객체도 생성해야만 함. <br>
 > 
 ```java
