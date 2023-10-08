@@ -367,7 +367,7 @@ public class StoreDTO {
 - 생성자의 인자값이 너무 많다면 빌더패턴을 사용하기 좋은 케이스임  <br>
 
 ### 빌더패턴을 사용하는 예시
-- StringBuilder 객체도 빌더패턴을 구현하여 구성되어있다 <br>
+- StringBuilder 객체도 빌더패턴을 구현하여 구성되어 있다고 함 <br>
 
 ```java
 
@@ -378,8 +378,8 @@ public class StoreDTO {
 
 ```
 https://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html  <br>
-- 설명의 Method Detail을 보면, 빌더패턴으로 디자인되어있다 <br>
 
+- (자기 자신을 리턴해서, 메소드 체인이 가능하게 되는 부분임 . 저렇게 append안에 인자값을 넣으면 build()가 되는 듯 함)  
 ```java
 	public StringBuilder append(Object obj)
 ```
