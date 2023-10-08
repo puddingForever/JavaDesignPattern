@@ -70,7 +70,7 @@ double price 와 int weight만 필요한 경우에도 뒤의 author와 clientNam
 
 - UML 
 
-![image](https://github.com/puddingForever/JavaDesignPattern/assets/126591306/69778fe6-c30f-46ee-8892-5365337bf37e)
+![image](https://github.com/puddingForever/JavaDesignPattern/assets/126591306/47029eb1-2fd7-4ade-bb51-bebc6dc6631c)
 
 
 - Product이 표시된 곳은 최종결과물이다. 나는 ClothingStoreDTO와 GroceryStoreDTO를 만들 것임
