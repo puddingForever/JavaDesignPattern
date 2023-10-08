@@ -42,9 +42,9 @@ double price 와 int weight만 필요한 경우에도 뒤의 author와 clientNam
 
 ### 빌더(Builder)란 도대체 무엇인가?
 - 인스턴스 생성시 생성자의 형태에 따른 **생성순서의 규칙을 단순화** 해줌 
-- 복잡한 객체를 생성하는 클래스를 분리하여 느슨한 결합(loose coupling)을 위해 추상클래스로 만들어줌
+- 복잡한 객체를 생성하는 클래스를 분리하여 느슨한 결합(loose coupling)을 위해 추상개념을 사용함
 
-#### UML 
+#### 빌더패턴 구현순서  
 
 - ![image](https://github.com/puddingForever/JavaDesignPattern/assets/126591306/6f862b88-f30b-4304-9946-ba67a6bed525)
 
@@ -52,10 +52,10 @@ double price 와 int weight만 필요한 경우에도 뒤의 author와 clientNam
 - 내가 만들고자하는 최종 객체
 
 2.Builder 
-- Product(결과물)을 만들기위한 부품들을 제공해주는 인터페이스
-- 인스턴스를 생성하기 위해 생성자의 파라메터 값들을 한번에 셋팅해주는 것이 아니라, 필요값만 개별적으로 셋팅할 수 있도록 해줌! (위 예시의 Book클래스를 보면 weight,price,author,clientName 모두 셋팅해줘야 객체가 생성되는데, 빌더를 이용하면 price만 넣어도 객체가 생성됨)
+- Product(결과물)을 만들기위한 **부품들을 제공해주는 인터페이스**
+- 인스턴스를 생성하기 위해 생성자의 파라메터 값들을 한번에 셋팅해주는 것이 아니라, 필요값만 개별적으로 셋팅할 수 있도록 해줌! (위 예시의 Book클래스를 보면 weight,price,author,clientName 모두 셋팅해줘야 객체가 생성되는데, 빌더를 이용하면 price만 넣어도 인스턴스가 생성됨)
 - 이미 만들어진 결과물 객체를 부르는 메소드도 가질 수 있음
-(빌더를 이용해서 부품을 조립하여 Product(결과물)을 만들었다면 다시 부를 수 있는 메소드도 가질 수 있음
+(빌더를 이용하여 Product(결과물)을 만들었다면 해당 결과물을 다시 부를 수 있는 메소드도 가질 수 있음
 
 3.ConcreteBuilder 
 - Builder인터페이스의 구현클래스 
@@ -64,6 +64,30 @@ double price 와 int weight만 필요한 경우에도 뒤의 author와 clientNam
 
 4.Director 
 - builder를 이용하여 최종 객체를 생성하는 부분
+
+
+### 빌더패턴을 이용하여 식료품점(GroceryStoreDTO)과 옷가게(ClothingStoreDTO)들을 만들어보자
+
+- UML 
+
+![image](https://github.com/puddingForever/JavaDesignPattern/assets/126591306/69778fe6-c30f-46ee-8892-5365337bf37e)
+
+
+- Product이 표시된 곳은 최종결과물이다. 나는 ClothingStoreDTO와 GroceryStoreDTO를 만들 것임
+- loose coupling을 위해 ClothingStoreDTO는 인터페이스를 구현해서 만들도록 설계해봄 (abstract이라고 표시된 곳은 인터페이스를 사용예정)
+- StoreDTOBuilder는 인터페이스로 되어있으며, 가게운영에 필요한 부품들을 만들기 위해 간단한 메소드들이 작성되있음
+- Client는 메인클라스 ! Director(최종객체를 생성하는 부분)의 역할을 한다. 
+- 주황색은 식료품점을 마드는 빌더임. 빌더인터페이스를 이용해서 다른 타입의 객체도 만들어봄
+
+
+
+
+
+
+
+
+
+
 
   
   
