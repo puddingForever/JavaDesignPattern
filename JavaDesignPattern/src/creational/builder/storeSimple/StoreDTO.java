@@ -26,7 +26,7 @@ public class StoreDTO {
 		this.city = city;
 	}
 
-	private String getOwner() {
+	public String getOwner() {
 		return owner;
 	}
 
