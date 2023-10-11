@@ -5,19 +5,19 @@ public class KpopMusic extends Music {
 	private String country;
 	private String topStar;
 	
-	private String getCountry() {
+	public String getCountry() {
 		return this.country;
 	}
 	
-	private void setCountry(String country) {
+	public void setCountry(String country) {
 		this.country = country;
 	}
 	
-	private String getTopStar() {
+	public String getTopStar() {
 		return this.topStar;
 	}
 	
-	private void setTopStar(String topStar) {
+	public void setTopStar(String topStar) {
 		this.topStar = topStar;
 	}
 }
