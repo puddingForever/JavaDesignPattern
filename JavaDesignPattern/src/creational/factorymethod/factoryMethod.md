@@ -26,7 +26,7 @@ ConcreteCreator
 
 - Creator(팩토리 메소드가 선언되는 객체)를 만들자 !  
 1. Creator는 구상 클래스(Concrete Class)로 만들어도 되고 , 추상으로 만들어도 됨 
-2. 다시한번 강조하지만, 팩토리 메소드는 서브클래스에서 오버라이딩 되어 **인스턴스를 만드는 그냥 단순한 메소드**라는 것을 알고있자 
+2. 다시한번 강조하지만, 팩토리 메소드는 서브클래스에서 오버라이딩 되어 **인스턴스를 생산하는 인스턴스 공장메소드**라는 것을 알고있자 
 
 ### 예시 UML  <br>
 ![image](https://github.com/puddingForever/JavaDesignPattern/assets/126591306/fc79d9ca-a220-4b7b-8fe2-ced2fcebbbe2)
