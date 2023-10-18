@@ -52,7 +52,7 @@ public abstract class DevCreator {
 	//팩토리 메소드
   // 리턴타입으로 Developer (JavaDeveloper , PhpDeveloper는 Developer를 상속받음)
   // 리턴타입을 추상으로 주었기 때문에 createDeveloper는 JavaDeveloper도 리턴할 수 있고 PhpDeveloper도 리턴가능 ! 
-  // 추상메소드이기 상속받은 클래스에서 오버라이드 필수 
+  // 추상메소드이기 상속받은 클래스에서 오버라이딩 필수 
 	protected abstract Developer createDeveloper();
 }
 
@@ -178,7 +178,7 @@ public class IteratorExample{
 - 팩토리 메소드를 사용하는 이유는 인스턴스 생성과정을 클라이언트 코드로부터 숨기기 위함임<br>
 클라이언트로부터 숨기려는 이유? <br>
 최종결과물 객체를 상속관계로 만들어서 (예시 : Developer <- JavaDeveloper , PhpDeveloper) 추후에 객체를 추가하고 싶을 때 유리함 <br>
-- 팩토리 메소드는 상속받는 서브클래스에서 오버라이드되어 인스턴스를 생성함
+- 팩토리 메소드는 상속받는 서브클래스에서 오버라이딩되어 인스턴스를 생성함
 - 구현 방법이 복잡함 + 유닛테스팅이 많이 필요함
 
 
