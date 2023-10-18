@@ -144,8 +144,8 @@ public abstract class AbstractCollection<E> extends Object implements Collection
 
 }
 ``
-- iterator()메소드는 iterator 인터페이스를 구현한 컬랙션 객체에서 사용되며 <br>
-컬랙션 객체에서 반복자객체(iterator)를 생성하고 반환하는 역할을 함
+- iterator()메소드는 iterator 인터페이스를 구현한 컬랙션 객체에서 사용
+- 컬랙션 객체에서 반복자객체(iterator)를 생성하고 반환하는 역할을 함
 
 ```java
 public class IteratorExample{
