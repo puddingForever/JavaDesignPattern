@@ -83,7 +83,7 @@ public class ClientObj {
 		printDev(new PhpDevCreator());
 	}
 	
-// DevCreator 안에 팩토리 메소드(인스턴스를 만드는 단순한 애) 가 있음 
+// DevCreator 안에 팩토리 메소드(인스턴스 공장) 가 있음 
 // 실제 인스턴스 생성하는 애가 클라이언트코드가 아니라 외부에 있는 것임 
 	public static void printDev(DevCreator creator) { 
 		Developer dev = creator.getDeveloper();
