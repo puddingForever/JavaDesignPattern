@@ -12,7 +12,7 @@
 
 
 **Prototype** :  **Clone() 메소드**가 들어있는 추상객체 <br>
-**ConcretePrototypeA,B** : 추상객체를 상속받은 구현객체. Prototype의 clone() 메소드를 오버라이딩하여 자기자신을 복제할 수 있음 <br>
+**ConcretePrototypeA,B** : Prototype 추상객체를 상속받은 구현객체. Prototype의 clone() 메소드를 오버라이딩하여 자기자신을 복제할 수 있음 <br>
 **Client** : 클라이언트 코드, clone()메소드를 활용하여 간단하게 인스턴스를 복제함  <br>
 
 
@@ -31,13 +31,13 @@ Cloneable 인터페이스를 구현하지 않고 clone()메소드를 사용하�
 
 
 ### 예시 UML
->미사일을 추상객체로 만들고, 아이언돔,생화학무기,초음속미사일을 구상객체로 만들어보았음 <br>
+>미사일을 추상객체로 만들고, 아이언돔,생화학무기,초음속미사일을 구현객체로 만들어보았음 <br>
 
 ![image](https://github.com/puddingForever/JavaDesignPattern/assets/126591306/59ea9306-7571-465d-b235-70afe8b9b6c8)
 
 **Missiles** : 프로토타입으로 만들 추상객체, 내부에 clone()메소드가가 있어서 자기 자신을 복제할 수 있도록 함 <br>
-**HyperSonicMissiles,IronDome** : Missiles을 구현하는 구상객체, 자기 자신을 복제할 수 있음 <br>
-**BioWeapon** : Missiles을 구현하는 구상객체, 이 객체는 복제가 불가하도록 바꿔봄 <br>
+**HyperSonicMissiles,IronDome** : Missiles을 구현하는 객체, 자기 자신을 복제할 수 있음 <br>
+**BioWeapon** : Missiles을 구현하는 객체, 이 객체는 복제가 불가하도록 설정해봄 <br>
 
 
 ### 예시 코드
@@ -58,10 +58,10 @@ Cloneable 인터페이스를 구현하지 않고 clone()메소드를 사용하�
   }
 ```
 
-Missile은 프로토타입으로 사용될 추상객체이다<br>
+Missiles은 프로토타입으로 사용될 추상객체이다<br>
 Cloneable 인터페이스(마커인터페이스)를 구현하여, JVM에게 복제가 가능한 객체라는 것을 알려주고 <br>
 Object의 clone()메소드를 오버라이딩하여 자기자신을 복제하고 리턴한다 <br>
-주의점은 복제가 불가한 객체도 있기때문에 CloneNotSupportedException을 throw로 던져준다. <br>
+주의점은 복제가 불가한 객체도 있기때문에 CloneNotSupportedException을 예외처리해줌. <br>
 <br>
 
 복제가능한 IronDome 구현객체 
@@ -114,7 +114,7 @@ public class Client{
           System.out.println(d1); // 아이언돔 공격
 
 
-          //아이언돔 인스턴스 복제
+          //아이언돔 인스턴스 복제 (new키워드가 아닌 아닌 , clone()메소드로 인스턴스 생성) 
           IronDome d2 = (IronDome)d1.clone();
           d2.reset();
           System.out.println(d2); // 아이언돔 재발사
@@ -136,19 +136,15 @@ public class Client{
 ### 프로토타입 패턴 사용시 고려사항 
 1. Cloneable 인터페이스를 구현하여 복제가 가능한 객체라는 JVM에게 알려줌 
 2. Object객체의 clone()메소드 오버라이딩시 접근제한자를 public으로 바꿔주기
-3. clone()메소드에 객체 초기화 설정을 하여, 복제시 초기화 상태로 복제되게 해줌
-   > 초기화 과정이 없으면 , 복제이기 떄문에 이전 인스턴스의 값이 그대로 나옴 
+3. clone() 메소드로 생성된 객체는 새로운 heap메모리 영역을 할당받음. 내부에 있는 내용만 복제된 것. 
 
 ### 프로토타입 패턴 사용예시 
 Object 객체의 clone()은 프로토타입 패턴 그 자체임 <br>
-Cloneable 인터페이스로 특정 객체는 복제가 가능하다는 것을 표시하고, Object 객체의 clone()메소드를 오버라이딩하여 <br>
-실제 인스턴스를 복제함 <br>
+Cloneable 인터페이스를 구현하여 JVM에게 해당객체는 복제가 가능하다는 것을 표시하고, Object 객체의 clone()메소드를 오버라이딩하여 사용
 
 ### 결론 
 1. 상태의 변화가 많이 없는 대용량의 인스턴스를 만들고 싶을 때 사용하기
-2. clone()메소드로 간단하게 인스턴스 복제가 가능 
+2. clone()메소드로 간단하게 인스턴스를 복제하여 생성이 가능 
 3. 로직이 거의 없는 얕은 복사라서 Java개발자들에게 선호되는 패턴은 아니라고 한다.
-
-
 
 
