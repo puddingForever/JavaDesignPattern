@@ -8,6 +8,10 @@ Repo for Java Design Pattern
 - <a href="https://github.com/puddingForever/JavaDesignPattern/tree/main/JavaDesignPattern/src/creational/factorymethod">Factory Pattern</a>
 - <a href="https://github.com/puddingForever/JavaDesignPattern/tree/main/JavaDesignPattern/src/creational/prototype/war">Prototype Pattern</a>
 - <a href="https://github.com/puddingForever/JavaDesignPattern/tree/main/JavaDesignPattern/src/creational/objectpool/gameworld">ObjectPool Pattern</a>
+- <a href="https://github.com/puddingForever/JavaDesignPattern/tree/main/JavaDesignPattern/src/creational/singleton">Singleton Pattern</a>
+
+
+
 
 
 
