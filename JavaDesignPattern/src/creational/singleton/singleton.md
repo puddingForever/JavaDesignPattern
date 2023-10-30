@@ -163,7 +163,7 @@ public class Runtime{
 }
 
 ```
-- Runtime 클래스(자바 실행환경과 관련된 다양한 작업수행)는 Eager Singleton 패턴을 따르고 있음<br>
+- Runtime 클래스는 Eager Singleton 패턴을 따르고 있음<br>
 - 애플리케이션에서 항상 하나의 Runtime 인스턴스만 사용되며, 초기화가 즉시 이루어지므로 멀티스레드 환경에서 안전한 방식으로 Runtime 클래스의 인스턴스를 관리해줌 <br>.
 
 
