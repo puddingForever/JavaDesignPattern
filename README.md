@@ -4,14 +4,16 @@ Repo for Java Design Pattern
 ## 생성패턴(Creational Design Patterns) 
 > 생성패턴(Creational Design Pattern)이란 객체의 생성과 관련된 패턴으로, **객체의 생성절차를 추상화(flexibility and reuse of existing code)** 하는 패턴이다.
 - [Builder Pattern](#BuilderPattern) 
-- [Simple Factory Pattern](#SimpleFactory-Pattern) 
-- <a href="https://github.com/puddingForever/JavaDesignPattern/tree/main/JavaDesignPattern/src/creational/factorymethod">Factory Pattern</a>
-- <a href="https://github.com/puddingForever/JavaDesignPattern/tree/main/JavaDesignPattern/src/creational/prototype/war">Prototype Pattern</a>
-- <a href="https://github.com/puddingForever/JavaDesignPattern/tree/main/JavaDesignPattern/src/creational/objectpool/gameworld">ObjectPool Pattern</a>
-- <a href="https://github.com/puddingForever/JavaDesignPattern/tree/main/JavaDesignPattern/src/creational/singleton">Singleton Pattern</a>
+- [Simple Factory Pattern](#SimpleFactoryPattern) 
+- [Factory Pattern](#FactoryPattern)
+- [Prototype Pattern](#PrototypePattern)
+- [ObjectPool Pattern](#ObjectPool)
+- [Singleton Pattern](#Singleton)
+
+<hr>
+
 
 # BuilderPattern
-
 
 
 ### 한마디 정리 
@@ -454,7 +456,7 @@ https://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html  <br>
 <hr>
 
 
-#SimpleFactory Pattern 
+# SimpleFactoryPattern 
 
 ## 한마디 정리 
 + 객체 생성 로직을 추상화(클라이언트 객체는 알수 없음)하고 간단한 방식을 이용해 객체를 생성함
@@ -601,7 +603,7 @@ public class Client {
 
 <hr>
 
-# Factory Pattern
+# FactoryPattern
 
 - 클라이언트 코드로부터 객체의 생성과정을 분리할 때 씀 
 -  클라이언트 코드에 영향을 주지 않으면서 객체를 추가할 수 있음 
@@ -788,7 +790,7 @@ public class IteratorExample{
 <hr>
 
 
-# 프로토타입 패턴 (Prototype Pattern)
+# PrototypePattern
 
 
 ### 프로토타입 패턴이란?
@@ -941,7 +943,7 @@ Cloneable 인터페이스를 구현하여 JVM에게 해당객체는 복제가 �
 
 <hr>
 
-# 오브젝트 풀패턴 (Object Pool)
+# ObjectPool
 
 ### 오브젝트 풀패턴이란 ?
 **객체(인스턴스)를 미리 생성**해두고,**필요할 때마다 가져다가 쓰는 형태**이다. <br>
@@ -1072,7 +1074,7 @@ public static void main(String[] args){
 <hr>
 
 
-# 싱글톤 패턴(Singleton)
+# Singleton
 
 ## 싱글톤(Singleton) 패턴이란?
 - 싱글톤 클래스는 오직 하나의 인스턴스를 가지며, 그 인스턴스에 전역적(global)으로 접근할 수 있는 단일 지점(single point)을 제공함
