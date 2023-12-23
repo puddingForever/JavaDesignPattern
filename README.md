@@ -1,5 +1,7 @@
 # JavaDesignPattern
-Repo for Java Design Pattern 
+
+This is a repository for practicing design patterns that web developers should be familiar with. <br> 
+웹개발자가 알아야할 디자인 패턴을 연습한 레포입니다. 
 
 ## 생성패턴(Creational Design Patterns) 
 > 생성패턴(Creational Design Pattern)이란 객체의 생성과 관련된 패턴으로, **객체의 생성절차를 추상화(flexibility and reuse of existing code)** 하는 패턴이다.
