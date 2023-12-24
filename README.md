@@ -1432,30 +1432,6 @@ public class EmployeeObjectAdapter implements Customer{
 - 클래스 어댑터는 컴파일 타임에 상속 관계가 정해지기 때문에, 런타임에 동적으로 대상 클래스를 변경하기 어려울 수 있다. 반면에 객체 어댑터는 구성(Composition)을 사용하므로, 런타임에 어댑터 대상 클래스의 인스턴스를 변경하거나 여러 대상 클래스를 동시에 사용하는 등의 유연성을 제공하기 때문에 선호된다.
    
 
-## 라이브러리 사용예시
-- java.io.InputStreamReader, java.io.OutputStreamWriter는 어댑터 패턴으로 설계되어있이다.
-- InputStream/OutputStream이 어댑터 대상 클래스이고 이를 Reader/Writer 추상클래스에 적응시킨다.
-- 클라이언트 코드는 Reader를 직접 사용하지 않아도 InputStreamReader 클래스만드로 Reader 클래스의 메소드를 사용할 수 있다.
-
-- InputStreamReader
-```java
-public class InputStreamReader extends Reader{
-
-	private final StreamDecoder sd;
-
-	public InputStreamReader(InputStream in){
-		// 생성자 로직
-	}
-
-	// Reader 추상 클래스에 있는 메소드를 가져와서 사용함 
-	public int read(read cbuf[], int offset, int length) throws IOExcpetion{
-		return sd.read(cbuf,offset,length);
-	}
-	public int read() throws IOException{
-		return sd.read;
-	}
-}
-```
 
 ## 결론 
 - 클라이언트 코드가 사용하는 인터페이스가 내부 객체와 다를 때 어댑터 패턴으로 설계할 수 있다.
