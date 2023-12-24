@@ -1369,7 +1369,7 @@ public class Employee{
 ```
 
 - EmployeeClassAdapter
-```
+```java
 //Employee 클래스를 Customer 인터페이스에 적응시켜주는 클래스
 public class EmployeeClassAdapter extends Employee implements Customer{
 	@Override
@@ -1404,7 +1404,7 @@ public class EmployeeClassAdapter extends Employee implements Customer{
 public class EmployeeObjectAdapter implements Customer{
 	private Employee adoptee; // 어댑터 대상 인스턴스를 내부에 포함
 
-	public EMployeeObjectAdapter(Employee adoptee){
+	public EmployeeObjectAdapter(Employee adoptee){
 		this.adoptee = adoptee;
 	}
 
