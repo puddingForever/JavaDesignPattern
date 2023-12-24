@@ -1331,7 +1331,7 @@ public class Runtime{
 ### UML 
 - 클래스 어댑터(Class Adapter)
 ![image](https://github.com/puddingForever/JavaDesignPattern/assets/126591306/68bc4627-d2d1-458a-9b05-30d829f12d08)
-1. BusinessCardAdapter : 클라이언트 코드
+1. BusinessCardDesigner : 클라이언트 코드
 2. Customer : 클라이언트 코드가 카드를 만들기 위해 사용하는 인터페이스
 3. Employee : 카드가 만들어지기 위한 메소드가 들어있는 클래스 (어댑터 대상)
 4. EmployeeClassAdapter : 클라이언트가 사용하는 인터페이스인 Customer와 클라이언트가 필요로 하는 메소드가 들어있는 Employee 클래스를 연결해주는 어댑터 클래스
@@ -1391,7 +1391,7 @@ public class EmployeeClassAdapter extends Employee implements Customer{
 - 객체 어댑터(Object Adapter)
 ![image](https://github.com/puddingForever/JavaDesignPattern/assets/126591306/e928e18a-b0e0-47a3-bc6c-0317650e3ba5)
 
-1. BusinessCardAdapter : 클라이언트 코드
+1. BusinessCardDesigner : 클라이언트 코드
 2. Customer : 클라이언트 코드가 카드를 만들기 위해 사용하는 인터페이스
 3. Employee : 카드가 만들어지기 위한 메소드가 들어있는 클래스 (어댑터 대상)
 4. EmployeeObjectAdapter : 클라이언트가 사용하는 인터페이스인 Customer와 클라이언트가 필요로 하는 메소드가 들어있는 Employee 클래스를 연결해주는 어댑터 클래스
