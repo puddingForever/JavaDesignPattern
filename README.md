@@ -12,6 +12,10 @@ This is a repository for practicing design patterns that web developers should b
 - [ObjectPool Pattern](#ObjectPool)
 - [Singleton Pattern](#Singleton)
 
+## 구조패턴(Structural Design Patterns) 
+> 구조패턴(Structural Design Pattern)이란  클래스나 객체를 조합해 더 큰 구조를 만드는 패턴이다. 예를 들어 서로 다른 인터페이스를 지닌 2개의 객체를 묶어 단일 인터페이스를 제공하거나 객체들을 서로 묶어 새로운 기능을 제공하는 패턴이다.
+- [Adapter Pattern](#AdapterPattern) 
+
 <hr>
 
 
@@ -455,6 +459,11 @@ https://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html  <br>
 - Builder가 인터페이스나 추상클래스로 되어있다면 ConcreteBuilder로 구현해서 사용 <br>
 - **Director** : Builder 클래스를 사용하는 부분. 인스턴스를 생성하는 클래스에서 바로 사용함 <br>
 
+
+
+### 코드보기
+<a href="https://github.com/puddingForever/JavaDesignPattern/tree/main/JavaDesignPattern/src/creational/builder">Code</a>
+
 <hr>
 
 
@@ -602,6 +611,9 @@ public class Client {
 ### 최종 한마디 
 + Simple Factory는 단순한 조건만을 가지고 인스턴스를 생성해주는 패턴이다. 하지만 인스턴스를 생성하기위한 조건이 복잡한 경우라면 Factory Method를 사용해야함 ~
 
+
+### 코드보기
+<a href="https://github.com/puddingForever/JavaDesignPattern/tree/main/JavaDesignPattern/src/creational/simplefactory/stream">Code</a>
 
 <hr>
 
@@ -789,6 +801,13 @@ public class IteratorExample{
 - 구현 방법이 복잡함 + 유닛테스팅이 많이 필요함
 
 
+
+### 코드보기 
+<a href="https://github.com/puddingForever/JavaDesignPattern/tree/main/JavaDesignPattern/src/creational/factorymethod">Code</a> 
+
+
+
+
 <hr>
 
 
@@ -943,6 +962,15 @@ Cloneable 인터페이스를 구현하여 JVM에게 해당객체는 복제가 �
 
 
 
+
+
+### 코드보기 
+<a href="https://github.com/puddingForever/JavaDesignPattern/tree/main/JavaDesignPattern/src/creational/prototype/war">Code</a> 
+
+
+
+
+
 <hr>
 
 # ObjectPool
@@ -1071,6 +1099,12 @@ public static void main(String[] args){
  //커넥션풀에서 커넥션 인스턴스를 가져옴 
  Connection conn = dataSource.getConnection(); 
 ```
+
+
+### 코드보기 
+<a href="https://github.com/puddingForever/JavaDesignPattern/tree/main/JavaDesignPattern/src/creational/objectpool/gameworld">Code</a> 
+
+
 
 
 <hr>
@@ -1259,7 +1293,179 @@ public class Runtime{
 - 스프링 컨테이너(ApplicationContext) 내에서 하나의 빈 객체 인스턴스만을 유지하기 위함임
 - 싱글톤 스코프로 빈의 상태를 공유하고 빈을 여러 곳에서 쉽게 주입하거나 참조할 수 있도록 도와줌
 
+### 코드보기 
+<a href="https://github.com/puddingForever/JavaDesignPattern/tree/main/JavaDesignPattern/src/creational/singleton">Code</a> 
 
+
+<hr>
+
+
+
+# AdapterPattern
+
+## 어댑터(Adapter) 패턴이란?
+- 클라이언트 코드가 사용하는 인터페이스가 클래스와 상이하여 사용할 수 없을 때 어댑터 클래스로 적응/연결 시켜준다. 
+- 클라이언트 인터페이스와 클래스를 감싸는(wrap) 패턴이기 때문에 wrapper라고도 불린다. 
+
+
+## UML 
+어댑터 패턴의 구조는 크게 클래스 어댑터(Class Adapter)와 객체 어댑터(Object Adapter)로 나누어진다.
+- 클래스 어댑터 ( Class Adapter ) 
+![image](https://github.com/puddingForever/JavaDesignPattern/assets/126591306/6b37f66d-be82-4d8a-a9fe-5971f4ec8e8a)
+1. 클래스 어댑터는 상속(Inheritance)을 통해 어댑터 역할을 수행한다.
+2. 기존의 클래스를 확장(상속)하여 새로운 클래스를 생성한다. <br>
+2.1 기존의 클래스를 상속하는 것이기 때문에 메소드 호출시 this 키워드를 사용한다.
+
+- 객체 어댑터(Object Adapter)
+![image](https://github.com/puddingForever/JavaDesignPattern/assets/126591306/cc27dfca-5024-4ca3-81e0-f5c4ae6c9be8)
+1. 객체 어댑터는 구성(Composition)을 통해 어댑터 역할을 수행한다
+2. 어댑터 클래스는 어댑터 대상 클래스의 인스턴스를 내부에 포함된다. <br>
+2.1 인스턴스 내부에 포함하는 것이기 때문에 인스턴스 변수로 메소드를 사용한다. 
+
+## 구현예시
+
+직원의 사원카드를 만드는 시스템이다. 
+
+### 클래스 어댑터(Class Adapter) 
+- 클라이언트 인터페이스의 적응을 상속(extends)을 통해 실현한다.
+ 
+### UML 
+- 클래스 어댑터(Class Adapter)
+![image](https://github.com/puddingForever/JavaDesignPattern/assets/126591306/68bc4627-d2d1-458a-9b05-30d829f12d08)
+1. BusinessCardAdapter : 클라이언트 코드
+2. Customer : 클라이언트 코드가 카드를 만들기 위해 사용하는 인터페이스
+3. Employee : 카드가 만들어지기 위한 메소드가 들어있는 클래스 (어댑터 대상)
+4. EmployeeClassAdapter : 클라이언트가 사용하는 인터페이스인 Customer와 클라이언트가 필요로 하는 메소드가 들어있는 Employee 클래스를 연결해주는 어댑터 클래스
+
+### 코드예시 
+
+- BusinessCardDesigner 
+```java
+// 클라이언트코드, 파라메터로 Customer가 필요
+
+public class BusinessCardDesigner{
+	public String designCard(Customer customer){
+		//생략
+	}
+}
+```
+
+- Customer
+```java
+//클라이언트 코드가 사용하는 인터페이스
+public interface Customer{
+	String getName();
+	String getDesignation();
+}
+```
+
+- Employee
+```java
+//클라이언트 코드가 필요로 하는 메소드가 있는 클래스 
+public class Employee{
+	private String fullName;
+	private String jobTitle;
+	// getter & setter
+}
+```
+
+- EmployeeClassAdapter
+```
+//Employee 클래스를 Customer 인터페이스에 적응시켜주는 클래스
+public class EmployeeClassAdapter extends Employee implements Customer{
+	@Override
+	public String getName() {
+		return this.getFullName();
+	}
+
+	@Override
+	public String getDesignation() {
+		return this.getJobTitle();
+	}
+}
+```
+
+### 객체 어댑터(Object Adapter) 
+-  클라이언트 인터페이스의 적응을 구성(Composition)을 통해 실현한다.
+
+### UML 
+- 객체 어댑터(Object Adapter)
+![image](https://github.com/puddingForever/JavaDesignPattern/assets/126591306/e928e18a-b0e0-47a3-bc6c-0317650e3ba5)
+
+1. BusinessCardAdapter : 클라이언트 코드
+2. Customer : 클라이언트 코드가 카드를 만들기 위해 사용하는 인터페이스
+3. Employee : 카드가 만들어지기 위한 메소드가 들어있는 클래스 (어댑터 대상)
+4. EmployeeObjectAdapter : 클라이언트가 사용하는 인터페이스인 Customer와 클라이언트가 필요로 하는 메소드가 들어있는 Employee 클래스를 연결해주는 어댑터 클래스
+
+### 코드예시 
+- 클래스 어댑터와 동일하며 어댑터 클래스를 구성(Composition)으로 설계하는 점에서 다르다.
+
+- EmployeeObjectAdapter
+```java
+public class EmployeeObjectAdapter implements Customer{
+	private Employee adoptee; // 어댑터 대상 인스턴스를 내부에 포함
+
+	public EMployeeObjectAdapter(Employee adoptee){
+		this.adoptee = adoptee;
+	}
+
+	@Override
+	public String getName(){
+		return adoptee.getFullName();
+	}
+	@Override
+	public String getDesignation(){
+		return adoptee.getJobTitle();
+	}
+
+}
+```
+
+## 고려사항 
+
+- 일반적으로 클래스 어댑터는 선호되지 않는다.
+  
+1. 다중 상속의 제한 <br> 
+- 클래스 어댑터는 대상 클래스를 상속받기 때문에, 대상 클래스가 이미 다른 클래스를 상속받고 있는 경우 다중 상속의 문제가 발생할 수 있다. 
+2. 클래스가 인터페이스가 아닌 경우 <br> 
+- 클래스 어댑터는 어댑터 클래스가 어댑터 대상 클래스를 상속받기 때문에, 대상 클래스가 인터페이스가 아닌 구체적인 클래스인 경우에는 어댑터 패턴을 적용하기 어려울 수 있다.
+3. 런타임에 대상 클래스 변경의 어려움 <br>
+- 클래스 어댑터는 컴파일 타임에 상속 관계가 정해지기 때문에, 런타임에 동적으로 대상 클래스를 변경하기 어려울 수 있다. 반면에 객체 어댑터는 구성(Composition)을 사용하므로, 런타임에 어댑터 대상 클래스의 인스턴스를 변경하거나 여러 대상 클래스를 동시에 사용하는 등의 유연성을 제공하기 때문에 선호된다.
+   
+
+## 라이브러리 사용예시
+- java.io.InputStreamReader, java.io.OutputStreamWriter는 어댑터 패턴으로 설계되어있이다.
+- InputStream/OutputStream이 어댑터 대상 클래스이고 이를 Reader/Writer 추상클래스에 적응시킨다.
+- 클라이언트 코드는 Reader를 직접 사용하지 않아도 InputStreamReader 클래스만드로 Reader 클래스의 메소드를 사용할 수 있다.
+
+- InputStreamReader
+```java
+public class InputStreamReader extends Reader{
+
+	private final StreamDecoder sd;
+
+	public InputStreamReader(InputStream in){
+		// 생성자 로직
+	}
+
+	// Reader 추상 클래스에 있는 메소드를 가져와서 사용함 
+	public int read(read cbuf[], int offset, int length) throws IOExcpetion{
+		return sd.read(cbuf,offset,length);
+	}
+	public int read() throws IOException{
+		return sd.read;
+	}
+}
+```
+
+## 결론 
+- 클라이언트 코드가 사용하는 인터페이스가 내부 객체와 다를 때 어댑터 패턴으로 설계할 수 있다.
+- 클래스 어댑터(Class Adapter)패턴은 어댑터 대상 클래스(내부 객체)를 상속받고, 클라이언트 코드의 인터페이스를 구현하여 설계하는 방법이다.
+- 객체 어댑터(Object Adapter) 패턴은 클라이언트 코드의 인터페이스를 구현하고 어댑터 대상 클래스(내부객체)는 인스턴스로 사용하여 설계하는 방법이다. (어댑터 대상 클래스의 서브 클래스 구현을 허용하는 장점이 있다)
+
+### 코드보기 
+<a href="https://github.com/puddingForever/JavaDesignPattern/tree/main/JavaDesignPattern/src/structural/adaptor">Code</a> 
+  
 
 
 
