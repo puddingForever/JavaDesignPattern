@@ -14,7 +14,9 @@ This is a repository for practicing design patterns that web developers should b
 
 ## 구조패턴(Structural Design Patterns) 
 > 구조패턴(Structural Design Pattern)이란  클래스나 객체를 조합해 더 큰 구조를 만드는 패턴이다. 예를 들어 서로 다른 인터페이스를 지닌 2개의 객체를 묶어 단일 인터페이스를 제공하거나 객체들을 서로 묶어 새로운 기능을 제공하는 패턴이다.
-- [Adapter Pattern](#AdapterPattern) 
+- [Adapter Pattern](#AdapterPattern)
+- [Bridge Pattern](#BridgePattern) 
+
 
 <hr>
 
@@ -1440,6 +1442,96 @@ public class EmployeeObjectAdapter implements Customer{
 
 ### 코드보기 
 <a href="https://github.com/puddingForever/JavaDesignPattern/tree/main/JavaDesignPattern/src/structural/adaptor">Code</a> 
+  
+<hr>
+
+
+
+# BridgePattern
+
+## 브릿지(Bridge) 패턴이란?
+- 구상클래스 & 추상클래스가 상속으로 결합되어있을 때 브릿지 패턴을 이용하여 서로 영향을 주지 않고 결합을 풀 수 있다.
+- 두 개의 별도 상속 계층을 생성하며 **동작을 위한 구현부와 확장을 위한 추상부를 생성한다** 
+
+## UML 
+![image](https://github.com/puddingForever/JavaDesignPattern/assets/126591306/8e185a20-5c3f-425b-b413-602ec2ba6184)
+
++ **Abstraction** : 기능 계층의 최상위 클래스이며 구현 부분에 해당하는 클래스 인스턴스를 가지고 해당 인스턴스를 통해 구현 부분의 메소드를 호출한다. <br>
++ **RefinedAbstraction** : 기능 계층에서 새로운 부분을 확장한 클래스  <br>
++ **Implementor** : Abstraction의 기능을 구현하기 위한 인터페이스 정의  <br>
++ **ConcreteImplementor** : 실제 기능을 구현  <br>
+
+
+## 구현예시 
+
+![image](https://github.com/puddingForever/JavaDesignPattern/assets/126591306/a48d12ec-cc1c-4577-b583-6fa706724e38)
+
++ **FifoCollection** : 선입선출 first in first out 알고리즘이 구현된 클래스이다.  offer는 객체를 더하고 poll은 객체를 빼는 메소드이며 둘은 선입선출 알고리즘으로 바탕으로 실행된다. <br>
++ **Queue** : FifoCollection을 구현하는 구상클래스 <br>
++ **LinkedList** : 브릿지 패턴으로 연결될 Implementor 클래스(FifoCollection에는 없는 메소드들이 있으며, Queue에 의해 연결되게 된다.) <br>
++ **SinglyLinkedList, ArrayLinkedList** : LinkedList를 구현한 클래스 <br>
+  <br>
+브릿지패턴은 **LinkedList와 FifoCollection의 연결**로 이루어지는데, 구체적으로는 FifoCollection의 구현 클래스인 Queue가 LinkedList를 가지고 구상클래스들의 메소드를 사용하면서 연결이 시작된다.
+<br>
+
+- 브릿지패턴이 이루어지는 Queue클래스를 살펴보자
+```java
+public class Queue<T> implements FifoCollection<T>{
+
+        private LinkedList<T> list;
+
+	//클라이언트는 Queue  인스턴스 생성시, LinkedList의 구현클래스를 인자값으로 넘긴다
+	public Queue(LinkedList<T> list){
+		this.list = list;
+	}
+
+	//LinkedList의 메소드를 사용
+	@Override
+	public void offer(T element){
+		list.addLast(element);
+	}
+
+	@Override
+	public T poll(){
+		return list.removeFirst();
+	}
+}
+ 
+```
+
+- 클라이언트 코드
+```java 
+public class Client{
+	public static void main(String[] args){
+ 		//Queue 인스턴스 생성시, LinkedList의 구현클래스를 인자값으로 넣어 사용 
+		FifoCollection<Integer> collection = new Queue<>(new SinglyLinkedList<>());
+		collection.offer(10);
+		collection.poll(); //10
+  		
+	}
+}
+```
+
+- FifoCollection 과 LinkedList는 서로 변경하지 않으면서, 기능을 자유롭게 사용하고 있다. 이는 두개의 계층 클래스가 각각 독립적으로 이루어졌기 때문에 가능하다.
+
+
+## 브릿지패턴 사용예시 
+- JDBC API인 java.sql.DriverManager 클래스도 브릿지패턴을 사용하고 있다.
+  ![image](https://github.com/puddingForever/JavaDesignPattern/assets/126591306/f8309ce8-783f-4a71-b61e-ef2068e1913c)
+<br>
+JDBC 드라이버 매니저는 라이브러리로 등록된 DB Driver를 관리하고, DB 커넥션을 획득하는 역할을 한다. 드라이버 매니저의 경우도 구현부와 추상부가 각각 독립적으로 구분되어 있기 때문에 클라이언트는 DriverManager를 변경할 필요없이 간단하게 새로운 DB 드라이버 클래스로 변경할 수 있다. <br>
+
+## 결론
+- 추상과 구현의 결합도를 낮추고 싶을 때(decoupling) 브릿지 패턴을 사용한다. 
+- 추상과 구현에 각각의 클래스 계층구조를 설계하고 두 개의 구조를 브릿지패턴을 이용하여 연결한다.
+- **동작을 위한 구현부와 확장을 위한 추상부를 분리한다**
+- stackoverflow에서 쉬운 그림 예시를 찾았다. 
+ ![image](https://github.com/puddingForever/JavaDesignPattern/assets/126591306/33b675de-6c31-4bae-bbfb-5268c2d3306e)
+- 레거시 코드에서의 브릿지패턴 사용은 매우 복잡하여 사용을 지양한다고 한다. 
+
+  
+### 코드보기 
+<a href="https://github.com/puddingForever/JavaDesignPattern/tree/main/JavaDesignPattern/src/structural/bridge">Code</a> 
   
 
 
