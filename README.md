@@ -1454,7 +1454,9 @@ public class EmployeeObjectAdapter implements Customer{
 - 두 개의 별도 상속 계층을 생성하며 **동작을 위한 구현부와 확장을 위한 추상부를 생성한다** 
 
 ## UML 
-![image](https://github.com/puddingForever/JavaDesignPattern/assets/126591306/8e185a20-5c3f-425b-b413-602ec2ba6184)
+
+![image](https://github.com/puddingForever/JavaDesignPattern/assets/126591306/91bf8459-4423-4991-9ad3-7e56171f95a8)
+
 
 + **Abstraction** : 기능 계층의 최상위 클래스이며 구현 부분에 해당하는 클래스 인스턴스를 가지고 해당 인스턴스를 통해 구현 부분의 메소드를 호출한다. <br>
 + **RefinedAbstraction** : 기능 계층에서 새로운 부분을 확장한 클래스  <br>
@@ -1525,7 +1527,7 @@ JDBC 드라이버 매니저는 라이브러리로 등록된 DB Driver를 관리�
 - 추상과 구현의 결합도를 낮추고 싶을 때(decoupling) 브릿지 패턴을 사용한다. 
 - 추상과 구현에 각각의 클래스 계층구조를 설계하고 두 개의 구조를 브릿지패턴을 이용하여 연결한다.
 - **동작을 위한 구현부와 확장을 위한 추상부를 분리한다**
-- stackoverflow에서 쉬운 그림 예시를 찾았다. 
+- stackoverflow에서 쉬운 그림 예시를 찾았다. <br>
  ![image](https://github.com/puddingForever/JavaDesignPattern/assets/126591306/33b675de-6c31-4bae-bbfb-5268c2d3306e)
 - 레거시 코드에서의 브릿지패턴 사용은 매우 복잡하여 사용을 지양한다고 한다. 
 
