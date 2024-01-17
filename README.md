@@ -1473,7 +1473,7 @@ public class EmployeeObjectAdapter implements Customer{
 + **LinkedList** : 브릿지 패턴으로 연결될 Implementor 클래스(FifoCollection에는 없는 메소드들이 있으며, Queue에 의해 연결되게 된다.) <br>
 + **SinglyLinkedList, ArrayLinkedList** : LinkedList를 구현한 클래스 <br>
   <br>
-브릿지패턴은 **LinkedList와 FifoCollection의 연결**로 이루어지는데, 구체적으로는 FifoCollection의 구현 클래스인 Queue가 LinkedList를 가지고 구상클래스들의 메소드를 사용하면서 연결이 시작된다.
+브릿지패턴은 **LinkedList와 FifoCollection의 연결**로 이루어지는데, 구체적으로는 FifoCollection의 구현 클래스인 Queue가 LinkedList의 메소드를 사용하면서 연결이 시작된다.
 <br>
 
 - 브릿지패턴이 이루어지는 Queue클래스를 살펴보자
@@ -1535,13 +1535,3 @@ JDBC 드라이버 매니저는 라이브러리로 등록된 DB Driver를 관리�
 ### 코드보기 
 <a href="https://github.com/puddingForever/JavaDesignPattern/tree/main/JavaDesignPattern/src/structural/bridge">Code</a> 
   
-
-
-
-
-
-
-
-
-
-
