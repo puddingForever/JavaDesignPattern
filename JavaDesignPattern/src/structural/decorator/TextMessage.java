@@ -1,6 +1,5 @@
 package structural.decorator;
 
-//Concrete component. Object to be decorated
 public class TextMessage implements Message {
 
 	private String msg;
