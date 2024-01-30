@@ -1560,11 +1560,10 @@ JDBC 드라이버 매니저는 라이브러리로 등록된 DB Driver를 관리�
 ![image](https://github.com/puddingForever/JavaDesignPattern/assets/126591306/b3767817-de44-456a-866e-bb82b81965d5)
 
 - Message : 컨텐츠를 제공하는 인터페이스
-- TextMessage : Message의 구현클래스 , 컨텐츠 제공을 구체화한다.
-- Base64EncoderMessage : Base64로 인코딩 시켜주는 데코레이터.
-- HtmlEncodedMEssage : html로 인코딩 시켜주는 데코레이터 
+- TextMessage : Message의 구현클래스. 기본 텍스트 메시지를 나타낸다.
+- Base64EncoderMessage : Base64로 텍스트 메시지를 인코딩 시켜주는 데코레이터.
+- HtmlEncodedMEssage : html로 텍스트 메시지를 인코딩 시켜주는 데코레이터 
 <br>
-->  **Message를 건들지 않고도 데코레이터를 이용하여 기능을 확장시켰다. **
 
 ### 코드
 
@@ -1572,6 +1571,7 @@ JDBC 드라이버 매니저는 라이브러리로 등록된 DB Driver를 관리�
 ```java
 public class Client{
 	public static void main(String[] args){
+
 		Message m = new TextMessage("<Force>");
 
 		//데코레이터 패턴사용
@@ -1589,14 +1589,8 @@ public class Client{
 ```
 
 
-- Message 인터페이스
+- TextMessage 
 ```java
-public interface Message{
-	String getContent;
-}
-```
-
-- Message 구현클래스 
 public class TextMessage implments Message{
 	private String msg;
 
@@ -1609,10 +1603,36 @@ public class TextMessage implments Message{
 		return msg;
   	}
 }
+```
+
+- 데코레이터
+```java
+public class BaseEncodedMessage implements Message{
+
+	private Message msg;
+
+	public Base64EncodedMessage(Message msg){
+		this.msg = msg;
+	}
+
+	@Override
+	public String getContent(){
+		return Base64.getEncoder().encodeToString(msg.getContent().getBytes();
+	}
+}
+```
+
+클라이언트 코드에서는 기본 TextMessage로 시작하여 HtmlEncodeMessage, Base64EncodedMessage로 기능이 추가된 텍스트메시지를 받을 수 있다. <br>
+이 두개의 데코레이터로 인해,TextMessage를 수정하지 않고도 특정 기능이 추가되었다.이런식으로 추가적인 기능을 데코레이터 패턴으로 확장시키켠 런타임에 동적으로 기능을 조합하고 확장할 수 있다. <br>
 
 
-
-
-
+## 데코레이터 패턴예시 
+![image](https://github.com/puddingForever/JavaDesignPattern/assets/126591306/8c161c43-76e3-4a42-b7b0-ae23e0fd6598)
+- Java I/O 라이브러리도 데코레이터 패턴을 기반으로 설계되있다. 자바의 입출력 시스템은 InputStream,OutputStream 등과 같은 추상 클래스와 인터페이스를 제공하며 이러한 클래스들은 데이터를 읽고 쓰는데 필요한 기본적인 동작만을 정의하고 있다.
+- 데코레이터 패턴을 이용하여 기본 동작에서 다양한 기능을 동적으로 확장할 수 있다. 예를들어 BufferedInputStream, BufferedOutputStream,FileReader,FileWriter 등은 모두 데코레이터 패턴을 사용하여 기능을 추가한 예시이다.
 
   
+## 결론 
+- 존재하는 클래스에 기능을 추가하고 싶을 때 데코레이터 패턴을 사용한다.
+- 데코레이터는 또 다른 데코레이터를 감쌀 수 있으며 이는 원본 객체를 감싸고 있다.
+- 클라이언트 코드는 데코레이터 사용여부를 알지 못한다.
