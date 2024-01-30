@@ -15,7 +15,9 @@ This is a repository for practicing design patterns that web developers should b
 ## 구조패턴(Structural Design Patterns) 
 > 구조패턴(Structural Design Pattern)이란  클래스나 객체를 조합해 더 큰 구조를 만드는 패턴이다. 예를 들어 서로 다른 인터페이스를 지닌 2개의 객체를 묶어 단일 인터페이스를 제공하거나 객체들을 서로 묶어 새로운 기능을 제공하는 패턴이다.
 - [Adapter Pattern](#AdapterPattern)
-- [Bridge Pattern](#BridgePattern) 
+- [Bridge Pattern](#BridgePattern)
+- [Decorator Pattern](#DecoratorPattern) 
+
 
 
 <hr>
@@ -1534,4 +1536,83 @@ JDBC 드라이버 매니저는 라이브러리로 등록된 DB Driver를 관리�
   
 ### 코드보기 
 <a href="https://github.com/puddingForever/JavaDesignPattern/tree/main/JavaDesignPattern/src/structural/bridge">Code</a> 
+
+
+<hr>
+
+
+
+# DecoratorPattern
+
+## 데코레이터 패턴(Decorator Pattern)이란?
+- 주어진 상황 및 용도에 따라 어떤 객체에 책임(기능)을 동적으로 추가하는 패턴을 말한다.
+
+## UML
+![image](https://github.com/puddingForever/JavaDesignPattern/assets/126591306/f98aa57a-8d52-47c7-b54d-bb6515d03a12)
+- Component : 클라이언트 코드가 사용하는 인터페이스
+- ConcreteComponent : 인터페이스의 구현클래스
+- Decorator : 데코레이터 클래스. 인터페이스의 기능을 확장한다. **Decorator**라는 영단어 그대로 장식이 되는, 부수적인 기능을 추가할 수 있다. ConcreteDecorator는 이 Decorator를 상속받아 구현한다. Decorator는 Component라는 재귀적 연관을 이용하여 주기능과 여러 부수적인 기능들을 재조합 할 수 있게 한다.
+
+
+## 데코레이터 패턴 예시 
+
+### UML 
+![image](https://github.com/puddingForever/JavaDesignPattern/assets/126591306/b3767817-de44-456a-866e-bb82b81965d5)
+
+- Message : 컨텐츠를 제공하는 인터페이스
+- TextMessage : Message의 구현클래스 , 컨텐츠 제공을 구체화한다.
+- Base64EncoderMessage : Base64로 인코딩 시켜주는 데코레이터.
+- HtmlEncodedMEssage : html로 인코딩 시켜주는 데코레이터 
+<br>
+->  **Message를 건들지 않고도 데코레이터를 이용하여 기능을 확장시켰다. **
+
+### 코드
+
+- Client 코드 
+```java
+public class Client{
+	public static void main(String[] args){
+		Message m = new TextMessage("<Force>");
+
+		//데코레이터 패턴사용
+		Message decorator = new HtmlEncodedMessage(m);
+                // html 인코딩된 컨텐츠 출력
+		System.out.println(decorator.getContent()); 
+
+		decorator = new Base64EncodedMessage(decorator);
+                // base64 인코딩된 컨텐츠 출력
+		System.out.println(decorator.getContent);
+
+
+	}
+}
+```
+
+
+- Message 인터페이스
+```java
+public interface Message{
+	String getContent;
+}
+```
+
+- Message 구현클래스 
+public class TextMessage implments Message{
+	private String msg;
+
+ 	public TextMessage(String msg){
+  		this.msg = msg;
+  	}
+
+  	@Override
+  	public String getContent(){
+		return msg;
+  	}
+}
+
+
+
+
+
+
   
