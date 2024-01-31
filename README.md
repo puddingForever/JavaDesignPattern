@@ -1548,7 +1548,7 @@ JDBC 드라이버 매니저는 라이브러리로 등록된 DB Driver를 관리�
 - 주어진 상황 및 용도에 따라 어떤 객체에 책임(기능)을 동적으로 추가하는 패턴을 말한다.
 
 ## UML
-![image](https://github.com/puddingForever/JavaDesignPattern/assets/126591306/f98aa57a-8d52-47c7-b54d-bb6515d03a12)
+![image](https://github.com/puddingForever/JavaDesignPattern/assets/126591306/951803b1-abf3-41d3-84d0-9f745e06fe3e)
 - Component : 클라이언트 코드가 사용하는 인터페이스
 - ConcreteComponent : 인터페이스의 구현클래스
 - Decorator : 데코레이터 클래스. 인터페이스의 기능을 확장한다. **Decorator**라는 영단어 그대로 장식이 되는, 부수적인 기능을 추가할 수 있다. ConcreteDecorator는 이 Decorator를 상속받아 구현한다. Decorator는 Component라는 재귀적 연관을 이용하여 주기능과 여러 부수적인 기능들을 재조합 할 수 있게 한다.
@@ -1626,7 +1626,7 @@ public class BaseEncodedMessage implements Message{
 이 두개의 데코레이터로 인해,TextMessage를 수정하지 않고도 특정 기능이 추가되었다.이런식으로 추가적인 기능을 데코레이터 패턴으로 확장시키켠 런타임에 동적으로 기능을 조합하고 확장할 수 있다. <br>
 
 
-## 데코레이터 패턴예시 
+## 데코레이터 패턴 예시2
 ![image](https://github.com/puddingForever/JavaDesignPattern/assets/126591306/8c161c43-76e3-4a42-b7b0-ae23e0fd6598)
 - Java I/O 라이브러리도 데코레이터 패턴을 기반으로 설계되있다. 자바의 입출력 시스템은 InputStream,OutputStream 등과 같은 추상 클래스와 인터페이스를 제공하며 이러한 클래스들은 데이터를 읽고 쓰는데 필요한 기본적인 동작만을 정의하고 있다.
 - 데코레이터 패턴을 이용하여 기본 동작에서 다양한 기능을 동적으로 확장할 수 있다. 예를들어 BufferedInputStream, BufferedOutputStream,FileReader,FileWriter 등은 모두 데코레이터 패턴을 사용하여 기능을 추가한 예시이다.
