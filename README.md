@@ -1636,3 +1636,7 @@ public class BaseEncodedMessage implements Message{
 - 존재하는 클래스에 기능을 추가하고 싶을 때 데코레이터 패턴을 사용한다.
 - 데코레이터는 또 다른 데코레이터를 감쌀 수 있으며 이는 원본 객체를 감싸고 있다.
 - 클라이언트 코드는 데코레이터 사용여부를 알지 못한다.
+ 
+### 코드보기
+<a href="https://github.com/puddingForever/JavaDesignPattern/tree/main/JavaDesignPattern/src/structural/decorator">Code</a>
+
