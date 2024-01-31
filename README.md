@@ -1591,7 +1591,7 @@ public class Client{
 
 - TextMessage 
 ```java
-public class TextMessage implments Message{
+public class TextMessage implements Message{
 	private String msg;
 
  	public TextMessage(String msg){
@@ -1623,7 +1623,7 @@ public class BaseEncodedMessage implements Message{
 ```
 
 클라이언트 코드에서는 기본 TextMessage로 시작하여 HtmlEncodeMessage, Base64EncodedMessage로 기능이 추가된 텍스트메시지를 받을 수 있다. <br>
-이 두개의 데코레이터로 인해,TextMessage를 수정하지 않고도 특정 기능이 추가되었다.이런식으로 추가적인 기능을 데코레이터 패턴으로 확장시키켠 런타임에 동적으로 기능을 조합하고 확장할 수 있다. <br>
+이 두개의 데코레이터로 인해,TextMessage를 수정하지 않고도 특정 기능이 추가되었다.이런식으로 추가적인 기능을 데코레이터 패턴으로 확장시키면 런타임에 동적으로 기능을 조합하고 확장할 수 있다. <br>
 
 
 ## 데코레이터 패턴 예시2
