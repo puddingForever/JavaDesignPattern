@@ -17,6 +17,7 @@ This is a repository for practicing design patterns that web developers should b
 - [Adapter Pattern](#AdapterPattern)
 - [Bridge Pattern](#BridgePattern)
 - [Decorator Pattern](#DecoratorPattern) 
+- [Composite Pattern](#CompositePattern) 
 
 
 
@@ -1640,3 +1641,139 @@ public class BaseEncodedMessage implements Message{
 ### 코드보기
 <a href="https://github.com/puddingForever/JavaDesignPattern/tree/main/JavaDesignPattern/src/structural/decorator">Code</a>
 
+
+<hr>
+
+# CompositePattern
+
+## Composite Pattern 이란?
+- 개별 객체와 복합 객체(여러 객체로 이루어진 객체)의 계층 구조를 일관되게 처리하기 위해서 사용한다.
+- 주로 트리 구조를 형성하는 객체들 간의 관계를 모델링하는데 활용된다.
+- Composite Pattern 의 목적은 클라이언트 코드가 컴포지트와 리프 노드를 동일하게 접근할 수 있도록 하는 것이다.
+
+
+## UML
+![image](https://github.com/puddingForever/JavaDesignPattern/assets/126591306/f9b4408a-fb29-4a3f-ab73-21e8f5e67457)
+- **component**
+- 컴포지션의 모든 개체에 대한 기본 인터페이스
+- 하위 컴포지트를 관리하는 공통 메소드가 있는 인터페이스 또는 추상 클래스
+- Leaf 클래스와 전체에 해당하는 Composite 클래스의 공통 인터페이스를 작성
+- **leaf**
+- 기본 구성 요소의 기본 동작을 구현하며 다른 객체에 대한 참조는 포함되어 있지 않음
+- 구체적인 부분 클래스
+- Composite 객체의 부품으로 설정
+- **composite**
+- 전체 클래스
+- Leaf를 요소로 가진다.
+- 복수개의 Leaf, 복수개의 Composite 객체를 부분으로 가질 수 있다.
+- **client**
+- 기본 구성 요소 개체를 사용하여 컴포지션 요소에 엑세스 할 수 있음
+
+
+## 예시 
+- **Component**
+  ```java
+  public abstract class File{
+	private String name;
+
+        public File(String name){
+           this.name = name;
+       }
+
+       public String getName(){}
+
+       public void setName(String name){}
+
+       public abstract void ls();
+  	
+  }
+  ```
+  - component 클래스이며 컴포지션 모든 개체에 대한 기본 인터페이스이다.
+  - ls를 추상 메소드로 설정하여 , leaf&composite 클래스가 공통으로 해당 메소드를 오버라이딩하도록 강제하였다.
+
+ - **Leaf Node**
+```java
+public class BinaryFile extends File{
+     private long size;
+
+     public BinaryFile(String name, long size){
+          super(name);
+          this.size = size;
+    }
+
+   @Override
+   public void ls(){
+       System.out.println(getName() + "\t" + size);
+    }
+}
+```
+- 리프노드로서 부분 클래스의 역할을 한다.
+- 리프노드이기 때문에 자식 클래스는 없다. 
+- Composite 클래스의 부분 클래스로 사용된다. 
+
+
+- **Composite**
+```java
+public class Directory extends File{
+
+     private List<File> children = new ArrayList<>();
+
+    public Directory(String name){
+        super(name);
+    }
+
+    @Override
+    public void ls(){
+       System.out.println(getName());
+       children.forEach(File::ls);
+  }
+
+  @Override
+  public void addFile(File file){
+     children.add(file);
+ }
+}
+```
+- File 클래스를 확장하여 List<File> children 필드를 통해 복수의 자식 파일 또는 디렉토리를 가질 수 있다.
+- ls 메소드는 현재 디렉토리의 이름을 출력하고 자식들에 대해 File::ls 를 호출하여 재귀적으로 모든 파일과 디렉토리의 이름을 출력한다.
+
+- **Client**
+```java
+public static void main(String[] args){
+
+   //leaf or composite 객체 관계없이 동일하게 ls 메소드를 사용하고 있다. 
+    File root = createTreeOne();
+    root.ls();
+
+    File root2 = createTreeTwo();
+    root2.ls();
+}
+
+// composite 객체를 반환(directory)
+private static File createTreeOne() {
+	File file1 = new BinaryFile("File1", 1000);
+	Directory dir1 = new Directory("dir1");
+	dir1.addFile(file1);
+	File file2 = new BinaryFile("file2", 2000);
+	File file3 = new BinaryFile("file3", 150);
+	Directory dir2 = new Directory("dir2");
+	dir2.addFile(file2);
+	dir2.addFile(file3);
+	dir2.addFile(dir1);
+	return dir2;
+}
+
+//leaf node 객체를 반환 (binaryFile)
+private static File createTreeTwo() {
+	return new BinaryFile("Another file", 200);
+}
+```
+- 클라이언트 코드는 createTreeOne 메서드로 composite 객체인 directory를 반환하고, createTreeTwo 메서드를 통해 leaf node인 binaryFile을 반환한다. 
+- 두 객체의 계층 차이의 관계없이 동일하게 ls() 메소드를 호출하여 사용하고 있다. 즉, 클라이언트는 단일 객체이든 복합 객체이든 동일한 방식으로 다룰 수 있다. 
+
+## 결론 
+- 부모-자식 계층이거나 복합 계층으로 이루어진 구조라면 Composite Pattern을 고려한다.
+- Composite Pattern의 주요 목적은 클라이언트 코드가 단일 객체와 복합 객체(Composite)를 동일한 방식으로 다룰 수 있도록 하는 것이다.
+  
+### 코드보기
+<a href="https://github.com/puddingForever/JavaDesignPattern/tree/main/JavaDesignPattern/src/structural/composite">Code</a>
