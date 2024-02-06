@@ -17,10 +17,8 @@ This is a repository for practicing design patterns that web developers should b
 - [Adapter Pattern](#AdapterPattern)
 - [Bridge Pattern](#BridgePattern)
 - [Decorator Pattern](#DecoratorPattern) 
-- [Composite Pattern](#CompositePattern) 
-
-
-
+- [Composite Pattern](#CompositePattern)
+- [Facade Pattern](#FacadePattern) 
 <hr>
 
 
@@ -1777,3 +1775,94 @@ private static File createTreeTwo() {
   
 ### 코드보기
 <a href="https://github.com/puddingForever/JavaDesignPattern/tree/main/JavaDesignPattern/src/structural/composite">Code</a>
+
+
+<hr>
+
+# FacadePattern
+
+## Facade Pattern 이란?
+- 'Facade'는 얼굴 또는 건물의 외부 전면을 나타내며, 디자인 패턴에서는 복잡한 서브 시스템들의 의존성을 최소화하는 패턴이다.
+- 서브 시스템에 있는 인터페이스들에 대한 **통합 인터페이스**를 제공하여 서브 시스템을 더 쉽게 사용할 수 있도록 만드는 더 높은 수준의 인터페이스를 말한다.
+- 결합도가 강하게 묶여 있는 레거시 코드에서 유용하게 사용할 수 있다.
+![image](https://github.com/puddingForever/JavaDesignPattern/assets/126591306/5d5d57ed-ce53-473b-8edb-47940271884e)
+
+
+## 예시 UML 
+
+![image](https://github.com/puddingForever/JavaDesignPattern/assets/126591306/7b0fb65b-5398-4297-a785-c17b80b88219)
+- 이메일을 보내는 시스템이며, 서브시스템으로 Mailer, Email, StationaryFactory 등등이 있으며 이들은 강하게 결합(tightly coupled)되어 있다.
+- 클라이언트가 이메일을 보내는 작업을 진행할 때마다 서브시스템이 바로 작업을 진행하는 것이 아니라, Facade 클래스인 EmailFacade와만 접촉하여 각각의 기능을 사용한다.
+
+## 코드
+- 퍼사드 패턴 구현은 매우 간단하다. 클라이언트 코드에 있는 서브시스템 작업들을 퍼사드 클래스로 옮겨주면 끝 !
+- 클라이언트 코드는 서브 시스템을 직접 사용하지 않고 퍼사드 클래스를 통해 사용한다.
+
+- **클라이언트 코드**
+```java
+public class Client {
+
+	public static void main(String[] args) {
+		Order order = new Order("101", 99.99);
+                //퍼사드 클래스를 사용하여 이메일을 보내는 작업을 진행
+                EmailFacade facade = new EmailFacade();
+		boolean result = facade.sendOrderEmail(order);
+		
+		System.out.println("Order Email "+ (result?"sent!":"NOT sent..."));
+		
+	}
+	
+//     기존에 구현되어있던 이메일을 보내는 메소드.
+//     퍼사드 클래스로 전부 옮김 
+//	private static boolean sendOrderEmailWithoutFacade(Order order) {
+//		Template template = TemplateFactory.createTemplateFor(TemplateType.Email);
+//		Stationary stationary = StationaryFactory.createStationary();
+//		Email email = Email.getBuilder()
+//					  .withTemplate(template)
+//					  .withStationary(stationary)
+//					  .forObject(order)
+//					  .build();
+//		Mailer mailer = Mailer.getMailer();
+//		return mailer.send(email);
+//	}
+	
+}
+
+```
+
+- **퍼사드 클래스**
+```java
+public class EmailFacade {
+
+	//기존 클라이언트 코드에 있던 코드
+	public boolean sendOrderEmail(Order order) {
+		Template template = TemplateFactory.createTemplateFor(TemplateType.Email);
+		Stationary stationary = StationaryFactory.createStationary();
+		Email email = Email.getBuilder()
+					  .withTemplate(template)
+					  .withStationary(stationary)
+					  .forObject(order)
+					  .build();
+		Mailer mailer = Mailer.getMailer();
+		return mailer.send(email);
+	}
+}
+```
+- 기존 클라이언트코드에 구현되어있던 작업들을 모두 EmailFacade로 옮겼음 
+
+
+## 퍼사드 패턴 구현시 고려사항 
+- 퍼사드 패턴의 주목적은 클라이언트가 서브시스템을 더 이상 복잡하게 사용하지 않도록 결합도를 느슨하게 하는 것에 있다.
+- 퍼사드 클래스로 인터페이스나 추상클래스를 사용할 수 있다 (예시에서는 구상클래스로 사용했음)
+- 레가시 코드가 아닌 새로 구상한 시스템에 퍼사드 패턴이 필요하다는 것은 설계를 처음부터 다시 확인해야함을 의미한다. (설계가 처음부터 제대로 되어있는 시스템은 퍼사드 패턴이 필요없는 경우가 많다)
+- 무분별하게 사용되는 경우, 기존에 구상된 디자인을 숨겨버릴 수 있기 때문에 주의해서 사용해야한다. 
+
+## 결론 
+- 서브시스템이 다수의 클라스&인터페이스로 구현되어있다면 퍼사드 패턴을 고려한다.
+- 퍼사드 패턴은 보통 새 시스템이 레거시 시스템과 통신하기 위해 사용한다. 예를 들어 어떤 기업의 시스템은 클라스끼리 매우 강하게 결합되있고 코드도 2백만 줄이나 되며 리펙토링을 한번도 하지 않은 경우라고 치자. 그럼에도 이 시스템에는 중요한 기능이 포함되어있기 때문에 새로 만드는 시스템도 이 레거시 시스템에 의존할 수 밖에 없다. 이런 경우, 퍼사드 패턴을 사용하여 복잡한 레거시 코드에 대한 좀더 단순한 뷰(view)를 제공한다. 새 시스템은 퍼사드 객체와만 통신하고, 이 퍼사드 객체가 레거시 코드와 관련된 복잡한 로직을 대신한다.
+
+### 코드
+<a href="https://github.com/puddingForever/JavaDesignPattern/tree/main/JavaDesignPattern/src/structural/facade">Code</a>
+
+
+
