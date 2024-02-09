@@ -1905,7 +1905,6 @@ public class SystemErorrMessage implements ErrorMessage{
 
       private String helpUrlBase;
 
-     //객체 생성시 내적속성이 정의됨
       public SystemErrorMessage(){
            messageTemplate = "Application encounteredError";
            helpUrlBase = "http://///google.com//q===";
