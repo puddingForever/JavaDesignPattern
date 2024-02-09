@@ -18,7 +18,8 @@ This is a repository for practicing design patterns that web developers should b
 - [Bridge Pattern](#BridgePattern)
 - [Decorator Pattern](#DecoratorPattern) 
 - [Composite Pattern](#CompositePattern)
-- [Facade Pattern](#FacadePattern) 
+- [Facade Pattern](#FacadePattern)
+- [Flyweight Pattern](#FlyweightPattern) 
 <hr>
 
 
@@ -1864,5 +1865,122 @@ public class EmailFacade {
 ### 코드
 <a href="https://github.com/puddingForever/JavaDesignPattern/tree/main/JavaDesignPattern/src/structural/facade">Code</a>
 
+<hr>
+
+# FlyweightPattern
+
+## Flyweight Pattern 이란?
+- Flyweight은 종합격투기에서 쓰는 용어인데, 57kg 이하의 가벼운 체급을 나타낸다. 이 뜻 그대로 디자인패턴에서는 **메모리 사용을 작게** 만들어주는 패턴을 말한다. 
+- 반복되는 객체를 캐시에 저장해두고 필요할 때만 일시적으로 사용하여 메모리를 줄이는 기법이다.
+- 예를들어 FPS 게임에서 총을 쏠 떄 나오는 총알을 생각하면된다. 총알을 만약 각각 하나의 객체로 모두 독립적으로 생성한다면, 메모리를 지나치게 사용해서 성능이 나빠진다. 사실 총알은 위치만 다를 뿐 가지고 있는 특징들은 모두 같다. 총알의 색, 크기 등은 모두 같은데 이를 총알 객체가 독립적으로 가지고 있을 필요는 없다. 이때 플라이웨이트 패턴을 사용하여 메모리를 절약할 수 있다.
+- 위의 예시의 총알 객체의 경우 위치, 속도는 각각 총알이 가지고 있는 **고유한/유니크한 정보**이다. 이러한 정보를 내적속성(intrinsic state)라고 부르며, 이러한 속성들은 총알 자신만이 수정할 수 있다.
+- 총알의 색, 크기와 같은 외부의 공통된 정보를 외적속성(extrinsic state)라고 하며, 이는 클라이언트의 코드로 명령을 받아 수행되는 특성이다. 
+- intrinsic state(총알의 속도, 위치)는 각각의 총알 객체가 스스로 수정할 수 있지만, extrinsic state(총알의 색깔, 크기)는 총알 공장에서 만들어주는 대로 계속 유지해야하는 정보이다. 
+  
+## UML
+![image](https://github.com/puddingForever/JavaDesignPattern/assets/126591306/d5745f5e-d25b-4940-a226-e32f671dc7cc)
+-  **Client** : Flyweight Pattern을 이용하는 클라이언트
+-  **FlyweightFactory** : Flyweight 객체를 생성하고 공유하는 클래스
+-  **Flyweight** 인터페이스 : extrinsic state(공통된 정보)를 가지고 있으며 작업을 실행한다.
+-  **Flyweight1** 구상클래스 : Flyweight 인터페이스를 구현하고, intrinsic state(고유한 정보)를 저장한다.
+
+## 예시 
+- 에러메시지를 출력하는 시스템을 Flyweight Pattern으로 설계
+
+- **Flyweight 인터페이스**
+```java
+public interface ErrorMessage{
+	//외적속성(extrinsic state). 그냥 에러메시지 출력!
+	String getText(String code);
+}
+```
+- 에러메시지를 출력하는 것 자체는 고유한 특성을 가지고 있지 않음
+- 아직 구체적이진 않으며, 추후 클라이언트 코드로부터 명령을 받아 구체적인 속성(구체적으로 어떤 에러메시지인지)이 될것임
+  
+- **Flyweight 구상클래스**
+```java
+public class SystemErorrMessage implements ErrorMessage{
+      //내적속성(intrinsic state), 유니크한 정보
+      private String messageTemplate;
+
+      private String helpUrlBase;
+
+     //객체 생성시 내적속성이 정의됨
+      public SystemErrorMessage(){
+           messageTemplate = "Application encounteredError";
+           helpUrlBase = "http://///google.com//q===";
+      }
+
+    //외적속성+내적속성을 합하여 클라이언트코드가 사용할 수 있음 
+     @Override
+     public String getText(String code){
+        return messageTemplate + helpUrlBase + code; 
+     }
+
+}
+```
+- Flyweight 인터페이스를 구현한 Flyweight 구상클래스이다. 
+- 에러메시지에 대한 더 구체적인/유니크한 속성이 정의되어있음 (intrinsic state)
+- getText() 메소드를 오버라이딩하여, extrinsic state와 intrinsic state를 결합하여 사용하도록 함
+
+- **Flyweight Factory** 클래스
+```java
+public class ErrorMessageFactory{
+
+     //Flyweight 인스턴스를 얻기 위한 키(key)로 작용
+      public enum ErrorType{ UserError,SystemError }
+
+     //Eager Singleton으로 클래스 로드시 즉시 인스턴스를 생성하고 ,
+     //해당 인스턴스를 전역적으로 제공한다(static)
+     //getInstance() 메소드로만 인스턴스 접근가능 
+     private static final ErrorMessageFactory FACTORY = new ErrorMessageFactory();
+
+     public static ErrorMessageFactory getInstance(){
+        return FACTORY;
+    }
 
 
+    //키에 따른 에러메시지 유형 
+    private Map<ErrorType,SystemErrorMessage> errorMessages = new HashMap<>();
+
+    private ErrorMessageFactory(){
+        errorMessages.put(ErrorType.UserError,
+                             new SystemErrorMessage("User Error", "google.com/~");
+         errorMessages.put(ErrorType.SystemError,
+                              new SystemErrorMessage("System Error", 'google.com/~");
+    }
+
+   //키에 따른 에러메시지 객체 반환 
+   public SystemErrorMessage getError(ErrorType type){
+      return errorMessages.get(type);
+  }
+
+}
+```
+- Flyweight 객체를 얻기위한 팩토리클래스이다. 
+- enum ErrorType은 UserError와 SystemError를 정의하였는데 이는 에러메시지의 구체적인 내용, 즉 내적속성(Intrinsic State)를 나타낸다.
+- 해당 enum을 기준으로 ErrorMessageFactory 클래스는 서로 다른 내적속성을 가진 SystemErrorMessage 객체를 생성하여 관리한다.
+- ErrorMEssageFactory클래스는 싱글톤으로 구성되어있는데, private static final ErrorMessageFactory FACTORY = new ErrorMEssageFactory()를 보면 인스턴스를 클래스 내부에서 미리 생성한다. 이렇게 인스턴스를 설정해두면 어플리케이션이 실행될 때 단 하나의 인스턴스만 생성되며, 이후에는 getInstance() 메소드를 통해서만 인스턴스에 접근이 가능하다.
+- 싱글톤으로 구성된 ErrorMessageFactory는 동일한 에러 유형에 대해서는 항상 같은 인스턴스를 반환하여 중복을 피하고, 메모리 절약을 실현한다.
+- 각각의 에러메시지들은 HashMap에 저장해두고, 에러메시지 유형에 따른 객체를 생성해준다.
+
+
+- **Client**
+```java
+public class Client{
+	public static void main(String[] args){
+
+		SystemErrorMessage msg1 = ErrorMessageFactory.getInstance().getError(ErrorType.UserError);
+	}
+}
+```
+- ErrorMessageFactory는 싱글톤으로 구성되어있기 때문에 클래스 로드시 인스턴스가 바로 생성되며 getInstance()를 통해서만 인스턴스에 접근할 수 있다. 따라서 ErrorMessageFactory.getInstance()를 이용, 미리 생성되있는 인스턴스에 접근하고 에러메시지 유형(ErrorType.UserError) 키값을 전달하여 특정한 에러메시지 객체를 얻는다.
+
+
+## 결론
+- Flyweight pattern은 반복되는 객체를 캐시에 저장시키고(싱글톤을 이용) 필요할 때만 일시적으로 사용해서 메모리 사용을 줄임
+- 자바에서는 String Pool이 플라이웨이트 패턴으로 되있고, 게임 개발에서 많이 쓰는 디자인패턴
+- 아직 제대로 감이 잡히지 않아서.. 실제 프로젝트시 연동해봐야겠다
+
+## 코드
+<a href="https://github.com/puddingForever/JavaDesignPattern/tree/main/JavaDesignPattern/src/structural/flyweight">Code</a>
