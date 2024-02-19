@@ -19,7 +19,9 @@ This is a repository for practicing design patterns that web developers should b
 - [Decorator Pattern](#DecoratorPattern) 
 - [Composite Pattern](#CompositePattern)
 - [Facade Pattern](#FacadePattern)
-- [Flyweight Pattern](#FlyweightPattern) 
+- [Flyweight Pattern](#FlyweightPattern)
+- [Proxy Pattern](#ProxyPattern) 
+
 <hr>
 
 
@@ -1983,3 +1985,45 @@ public class Client{
 
 ## 코드
 <a href="https://github.com/puddingForever/JavaDesignPattern/tree/main/JavaDesignPattern/src/structural/flyweight">Code</a>
+
+<hr>
+
+# ProxyPattern
+
+## 프록시 패턴이란?
+- Proxy는 "대리"의 의미로 디자인패턴에서는 **대리인처럼 대상객체를 대신하여 로직을 제어**하는 구조패턴(Structural Pattern)을 말한다.
+- Proxy 패턴을 사용하는 이유는 다음과 같다.
+  1. **Protection Proxy(보호용 프록시)** : 접근 권한이 필요한 자원에 대한 접근을 제어한다.
+  2. **Remote Proxy(원격 프록시)** : 원격객체에 대한 접근을 제어한다.
+  3. **Virtual Proxy(가상 프록시)** : 생성하기 힘든 자원에 대한 접근을 제어한다.
+ 
+## 프록시패턴 UML
+![image](https://github.com/puddingForever/JavaDesignPattern/assets/126591306/5f7f4ce4-184b-4e8b-9661-1d76b81fe2be)
+
+- Subject : 클라이언트가 사용하는 인터페이스  
+- RealSubject : Subject를 구현한 구상클래스. 대상객체라고 부른다.
+- **Proxy**
+  1. 대상객체(RealSubject)의 참조값을 가지고, 클라이언트가 필요로하는 로직들을 제공한다.
+  2. 대상객체와는 다른 클래스이기 때문에 별도의 로직을 추가할 수 있다.
+  3. 클라이언트가 대상객체를 원하기 전까지 프록시로 대신하여 제공할 수 있다.
+     
+## 구현예시 
+
+### UML 
+![image](https://github.com/puddingForever/JavaDesignPattern/assets/126591306/c9132b86-e5b3-489e-a39f-cdf6886c031d)
+- Image : 클라이언트가 사용하는 인터페이스
+- BitmapProxy : Image를 구현하는 구상클래스. 실제 데이터가 있는 대상객체이다.
+- ImageProxy : 대상객체의 참조값을 가지고 로직들을 제공하는 프록시 객체
+- ImageFactory : 클라이언트가 사용하는 팩토리. 프록시 객체의 인스턴스를 만들어줌
+
+
+
+
+
+
+
+
+
+
+
+
