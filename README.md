@@ -24,6 +24,7 @@ This is a repository for practicing design patterns that web developers should b
 
 <hr>
 
+# 생성패턴
 
 # BuilderPattern
 
@@ -1305,7 +1306,7 @@ public class Runtime{
 
 <hr>
 
-
+# 구조패턴 
 
 # AdapterPattern
 
