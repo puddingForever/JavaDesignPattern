@@ -1993,10 +1993,9 @@ public class Client{
 
 ## 프록시 패턴이란?
 - Proxy는 "대리"의 의미로 디자인패턴에서는 **대리인처럼 대상객체를 대신하여 로직을 제어**하는 구조패턴(Structural Pattern)을 말한다.
-- Proxy 패턴을 사용하는 이유는 다음과 같다.
-  1. **Protection Proxy(보호용 프록시)** : 접근 권한이 필요한 자원에 대한 접근을 제어한다.
-  2. **Remote Proxy(원격 프록시)** : 원격객체에 대한 접근을 제어한다.
-  3. **Virtual Proxy(가상 프록시)** : 생성하기 힘든 자원에 대한 접근을 제어한다.
+- 프록시 패턴의 종류는 크게 static proxy(정적 프록시)와 dynamic proxy(동적 프록시)로 나누어진다
+  1. **Static Proxy(정적 프록시)** : 프록시가 대상객체를 직접 참조한다. 컴파일시 프록시가 대상객체를 참조하기 때문에 런타임 중에 변경할 수 없다.
+  2. **Dynamic Proxy(동적 프록시)** : 프록시와  대상객체 사이에 중간계층을 형성하기 때문에 런타임시 프록시객체를 동적으로 생성한다.
  
 ## 프록시패턴 UML
 ![image](https://github.com/puddingForever/JavaDesignPattern/assets/126591306/5f7f4ce4-184b-4e8b-9661-1d76b81fe2be)
@@ -2013,18 +2012,127 @@ public class Client{
 ### UML 
 ![image](https://github.com/puddingForever/JavaDesignPattern/assets/126591306/c9132b86-e5b3-489e-a39f-cdf6886c031d)
 - Image : 클라이언트가 사용하는 인터페이스
-- BitmapProxy : Image를 구현하는 구상클래스. 실제 데이터가 있는 대상객체이다.
+- BitmapImage : Image를 구현하는 구상클래스. 실제 데이터가 있는 대상객체이다.
 - ImageProxy : 대상객체의 참조값을 가지고 로직들을 제공하는 프록시 객체
 - ImageFactory : 클라이언트가 사용하는 팩토리. 프록시 객체의 인스턴스를 만들어줌
 
+# 정적 프록시(Static Proxy)
+
+- BitmapImage : Image인터페이스를 구현한 구상클래스 . 클라이언트가 필요로 하는 데이터가 있다.
+```java
+public class BitmapImage implements Image {
+	
+	private Point2D location;
+	private String name;
+	
+	public BitmapImage(String filename) {
+		System.out.println("Loaded from disk:"+filename);
+		name = filename;
+	}
+ //(생략)
+```
+
+- ImageProxy : proxy 객체이며 대상객체를 필요할 때만 쓰도록 해줌 
+```java
+public class ImageProxy implements Image {
 
 
+	//대상객체의 참조값을 가지고 있음 
+	private BitmapImage image;
+	
+	private String name;
+	
+	private Point2D location;
+	
+	public ImageProxy(String name) {
+		this.name = name;
+	}
+	
+	
+	@Override
+	public void setLocation(Point2D point2d) {
+		if(image != null) { // 이미지가 있다면 대상객체에 전달 
+			image.setLocation(point2d); 
+		}else { //이미지가 없다면 프록시의 필드에 저장 
+			location = point2d;
+		}
+	}
+
+    //(생략)
+
+}
+
+```
+- setLocation 메소드를 보면, 이미지가 null이 아닐때만 실제 대상객체에 값을 전달하고 있다. 즉, 필요할때만 대상객체를 부르고, 불필요한 경우 프록시 필드에 저장해둔다.
+  
+- 프록시 인스턴스를 전달하는 ImageFactory. 클라이언트가 사용하게 됨
+```java
+public class ImageFactory{
+	public static Image getImage(String name){
+		return new ImageProxy(name);
+	}
+}
+```
+- 실제 대상객체인 BitmapImage를 바로 전달하지 않고 팩토리를 이욯하여 프록시 인스턴스로 대신 전달한다.
+
+# 동적 프록시(Dynamic Proxy)
+- 동적프록시는 자바 리플렉션(Java Reflection)을 기반으로 동작하는 기술 중의 하나이다.
+- 자바 리플렉션은 실행 중인 자바 프로그램 내에서 클래스의 정보를 조사하고, 클래스의 메소드,필드,생성자 등을 동적으로 검사하고 사용하는 기술이다. 
+- 동적프록시는 InvocationHandler 인터페이스에 있는 invoke메소드의 정의를 통해 구현될 수 있다.
+- invoke 메소드의 시그니처는 다음과 같다.
+```java
+public Object invoke(Object proxy, Method method, Object[] args) throws Throwable
+```
+- **proxy** : 동적 프록시 객체
+- **method** : 현재 호출된 객체
+- **args** : 메소드에 전달된 인수배열
+ 
+- invoke메소드는 다음과 같이 사용될 수 있다.
+```java
+public class ImageInvocationHandler implements InvocationHandler{
+	@Override
+	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable{
+		//Image 클래스의 setLocation 메소드를 찾고,
+               // 해당 메소드를 setLocationMethod에 할당 
+		Method setLocationMethod = Image.class.getMethod("setLocation", new Class[]{Point2D.class});
+		//현재 호출되는 메소드가 setLocation일때
+                //Point2d 객체를 반환하여 출력한다.
+		if(setLocationMethod.equals(method)){
+			Point2D point2d = (Point2D)args[0];
+                        System.out.println(point2d);
+		}
+		return null;
+	}
+}
+```
+
+- 위의 코드에서는 InvocationHandler 인터페이스를 구현한다. InvocationHandler는 Relection api이며, 단일메소드인 invoke 메소드를 구현하여 동적으로 메소드를 가로채고 처리한다.
+
+- 프록시객체를 생성하는 팩토리 클래스는 relection API인 Proxy 클래스를 통해서 구현할 수 있다.
+- Proxy 클래스의 newProxyInstance 메소드를 사용하면 invoke 메소드가 들어있는 ImageInvocationHandler 클래스를 불러서 최종적으로 동적프록시를 가능하게 해준다.
+```java
+public class ImageFactory{
+	public static Image getImage(){
+		return (Image)Proxy.newProxyInstance(ImageFactory.getClassLoader(), new Class[] {Image.class}, new ImageInvocationHandler());
+	}
+}
+```
+- **Proxy.newProxyInstance** : 동적 프록시 생성 메소드,  Image 인터페이스를 구현한 객체가 반환된다.
+- **ImageFactory.getClassLoader()** : ImageFactory의 클래스 로더를 사용하여 프록시클래스의 로딩에 사용될 클래스 로더를 지정한다.
+- **new Class[]{Image.class}** : 프록시 객체가 구현할 인터페이스의 배열이다.
+- **new ImageInvocationHandler()** : 프록시 객체의 메소드를 호출할 때 호출되는 핸들러 객체를 지정한다.
+
+- 클라이언트코드 
+```java
+public class Client{
+	public static void main(String[] args){
+		Image img = ImageFactory.getImage();
+ 		img.setLocation(new Pont2D(-10,0));
+	}
+}
+```
+- 클라이언트 코드에서는 단순히 setLocation 메소드만 호출하였으나, 동적프록시 객체의 의해 invoke 메소드가 호출되어 Point2D 객체가 프린트 될것이다. 
 
 
-
-
-
-
-
-
-
+## 결론
+프록시 패턴은 제어 흐름을 조정하기 위한 목적으로 중간에 계층을 도입하여 여러 기능을 추가하거나 제어하면서 실제 서비스를 대신 수행하는 패턴이다. 
