@@ -22,6 +22,9 @@ This is a repository for practicing design patterns that web developers should b
 - [Flyweight Pattern](#FlyweightPattern)
 - [Proxy Pattern](#ProxyPattern) 
 
+## 행위패턴(Behavioral Design Patterns) 
+> 행위패턴(Behavioral Design Pattern)이란 클래스나 객체들이 서로 상호작용하는 방법이나 책임 분배 방법을 정의하는 패턴이다.
+
 <hr>
 
 # 생성패턴
@@ -2136,3 +2139,6 @@ public class Client{
 
 ## 결론
 프록시 패턴은 제어 흐름을 조정하기 위한 목적으로 중간에 계층을 도입하여 여러 기능을 추가하거나 제어하면서 실제 서비스를 대신 수행하는 패턴이다. 
+
+## 코드
+<a href="https://github.com/puddingForever/JavaDesignPattern/tree/main/JavaDesignPattern/src/structural/proxy">Code</a>
