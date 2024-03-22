@@ -24,6 +24,8 @@ This is a repository for practicing design patterns that web developers should b
 
 ## 행위패턴(Behavioral Design Patterns) 
 > 행위패턴(Behavioral Design Pattern)이란 클래스나 객체들이 서로 상호작용하는 방법이나 책임 분배 방법을 정의하는 패턴이다.
+- [Chain of Responsibility Pattern](#ChainOfResponsibility)
+  
 
 <hr>
 
@@ -2142,3 +2144,63 @@ public class Client{
 
 ## 코드
 <a href="https://github.com/puddingForever/JavaDesignPattern/tree/main/JavaDesignPattern/src/structural/proxy">Code</a>
+
+<hr>
+
+# ChainOfResponsibility
+ 
+## 책임 연쇄 패턴(Chain of Responsibility) 패턴이란? 
+- 요청(request)을 받는 코드가 스스로 요청을 처리할 수 없을 때, Successor라고 불리우는 후속객체가 요청을 처리하도록 함으로서 코드간의 결합도를 낮춰준다.
+- 객체들이 서로 연결되도록(chain) 설계하여 각각의 객체는 자신의 바로 다음 객체의 참조값을 가지고 있다.
+- 따라서 객체가 request를 처리하지 못한다면, Successor라고 불리우는 후속객체가 request를 처리하도록 한다.
+
+## UML
+![image](https://github.com/puddingForever/JavaDesignPattern/assets/126591306/e13de03b-31f7-4e1e-bfeb-e650131444c2)
+- **Handler** : 요청을 처리하기 위한 객체들이 가질 인터페이스
+- **ConcreteHandler1,2** : 요청의 종류에 따라 자신이 처리할 수 있는 부분을 구현한 객체
+- **Client** : request 요청객체
+
+## 책임연쇄패턴 구현방법
+### Abstract Handler
+- request를 처리하는 메소드를 정의하며, 처리불가시 후속객체에 접근할 수 있는 메소드를 정의
+
+### ConcreteHandler 
+- Handler 인터페이스의 구현제이며, request를 처리할 수 있는지 체크한다.
+- 만약 request를 처리할 수 없다면, 후속객체에 request를 전달한다.
+
+## Implementation
+- 사원의 직책(role)에 따라 휴가를 처리하는 어플리케이션이다.
+- LeaveApplication이 휴가를 처리하는 객체이다.
+
+### Abstract Handler
+```java
+public abstract class Employee implements LeaveApprover{
+
+// ... (생략)
+
+	//후속객체 체크
+ 	//leaveApplication을 현재 handler가 처리할 수 없다면 후속객체에 leaveApplication을 넘겨줌
+	@Override
+	public void processLeaveApplication(LeaveApplication application){
+		if(!processRequest(application) && successor != null){
+			successor.processLeaveApplication(application);
+		}
+	}
+
+	protected abstract boolean processRequest(LeaveApplication application);
+
+	@Override
+	public String getApproverRole(){
+		return role;
+	}
+ 
+}
+```
+
+
+
+
+
+
+
+
