@@ -2169,33 +2169,7 @@ public class Client{
 - 만약 request를 처리할 수 없다면, 후속객체에 request를 전달한다.
 
 ## Implementation
-- 사원의 직책(role)에 따라 휴가를 처리하는 어플리케이션이다.
-- LeaveApplication이 휴가를 처리하는 객체이다.
-
-### Abstract Handler
-```java
-public abstract class Employee implements LeaveApprover{
-
-// ... (생략)
-
-	//후속객체 체크
- 	//leaveApplication을 현재 handler가 처리할 수 없다면 후속객체에 leaveApplication을 넘겨줌
-	@Override
-	public void processLeaveApplication(LeaveApplication application){
-		if(!processRequest(application) && successor != null){
-			successor.processLeaveApplication(application);
-		}
-	}
-
-	protected abstract boolean processRequest(LeaveApplication application);
-
-	@Override
-	public String getApproverRole(){
-		return role;
-	}
- 
-}
-```
+![image](https://github.com/puddingForever/JavaDesignPattern/assets/126591306/c5bbb36f-6a21-4cb7-9335-2ee7e73b58a4)
 
 
 
