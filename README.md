@@ -2169,7 +2169,143 @@ public class Client{
 - 만약 request를 처리할 수 없다면, 후속객체에 request를 전달한다.
 
 ## Implementation
+- 다음은 휴가를 제출하는 프로그램의 UML이다. 휴가 승인은 Lead, Manager, Director에 따라 승인이 이루어진다. 
 ![image](https://github.com/puddingForever/JavaDesignPattern/assets/126591306/c5bbb36f-6a21-4cb7-9335-2ee7e73b58a4)
+- LeaveApprover : Handler 인터페이스로서 processRequest 메소드가 사원의 휴가제출(LeaveApplication)을 전달받는다.
+- Employee : LeaveApprover의 구상클래스, processRequest 메소드에 Lead, Manager, Director를 차례대로 전달하여 승인이 완료되지 않았다면 후속객체가 처리하도록 한다.
+  
+- **Employee**
+```java
+public abstract class Employee implements LeaveApprover{
+
+	private String role;
+        //후속객체(successor)
+	private LeaveApprover successor;
+	
+	public Employee(String role,LeaveApprover successor) {
+		this.role = role;
+		this.successor = successor;
+	}
+	
+	//후속객체에서 처리가 안됬을 경우, 다음 후속객체에게 LeaveApplication을 전달
+	@Override
+	public void processLeaveApplication(LeaveApplication application) {
+		if(!processRequest(application) && successor != null) {
+			successor.processLeaveApplication(application);
+		}
+	}
+	
+	protected abstract boolean processRequest(LeaveApplication application);
+	
+
+	@Override
+	public String getApproverRole() {
+		return role;
+	}
+	
+}
+
+```
+- processLeaveApplication 메소드의 조건문으로 processRequest 반환값을 주어서 값이 거짓인 경우, 후속객체가 leaveApplication을 처리하도록 한다.
+- processRequest 메소드는 abstract으로 설정하여 후속객체가 반드시 정의해야한다. 반환값인 참/거짓을 통해 후속객체가 처리할 것인지 아닌지를 설정한다.
+
+  
+- 후속객체1 Director
+  ```java
+  public class Director extends Employee {
+
+	public Director(LeaveApprover nextApprover) {
+		super("Director", nextApprover);
+	}
+	
+	@Override
+	protected boolean processRequest(LeaveApplication application) {
+		if(application.getType() == application.getType().PTO) {
+			application.approve(getApproverRole());
+			return true;
+		}
+		return false;
+	}
+	
+}
+```
+- 휴가타입이 PTO인 경우에만 휴가를 승인하도록 한다. 
+
+
+
+- 후속객체2 ProjectLead
+```java
+public class ProjectLead extends Employee{
+	
+	public ProjectLead(LeaveApprover successor) {
+		super("Project Lead",successor);
+	}
+
+	@Override
+	protected boolean processRequest(LeaveApplication application) {
+		if(application.getType() == LeaveApplication.Type.Sick) {
+			if(application.getNoOfDays() <=2 ) {
+				application.approve(getApproverRole());
+				return true;
+			}
+		}
+		return false;
+	}
+
+}
+```
+
+- ProjectLead는 휴가 타입이 Sick이고 이틀 미만의 경우만 true를 반환한다.
+- 해당 기준에 만족하지 않으면, ProjectLead의 ProcessRequest는 false를 반환하고, 후속객체가 있다면  Handler인터페이스가 후속객체로 요청을 전달한다.
+
+- Client 
+```java
+public class Client {
+
+	public static void main(String[] args) {
+	   LeaveApplication application = LeaveApplication.getBuilder().withType(Type.Sick)
+			   						  .from(LocalDate.now()).to(LocalDate.of(2024,6,5))
+			   						  .build();
+	   
+	   LeaveApprover approver = createChain();
+	   approver.processLeaveApplication(application);
+	   System.out.println(application);
+	}
+	
+	private static LeaveApprover createChain() {
+		Director director = new Director(null);
+		Manager manager = new Manager(director);
+		ProjectLead lead = new ProjectLead(manager);
+		
+		return lead;
+	}
+
+	
+}
+
+```
+- createChain 메소드에서 Handler 구상객체끼리 체인을 만들었다. 
+- Manager가 휴가 거절을 하면, Director에게 요청이 가고, ProjectLead가 휴가 거절을 하면, Manger에게 요청이 간다.
+
+
+  ## 예시
+- Servlet Filter에서 쓰이는 디자인패턴이다. 각각의 filter는 request를 처리할 수 있으며, request 처리 후 체인을 통해 후속객체에게 넘겨준다.
+- javax.servlet.Filter
+```java
+public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+```
+- chain 파라메터는 서블릿 필터 체인의 다음 필터로 요청을 전달하는데 사용된다. 
+- 만약 다음 필터가 없는 경우, 체인의 끝에 도달했음을 의미하며, 이는 서블릿으로 요청이 전달되어 마무리된다.
+  
+## 결론
+- 클라이언트로부터 요청을 하나의 객체가 처리하는 것이 아닌, 여러개의 처리 객체로 나누고, 이들을 사슬(chain)처럼 연결하여 처리한다.
+- 이러한 처리 객체를 Handler라고 부르며, 요청을 받아들이면 요청을 처리할 수 있는지, 없으면 다음 Handler 객체에 처리에 대한 책임을 전달한다.
+
+### Code
+<a href="https://github.com/puddingForever/JavaDesignPattern/tree/main/JavaDesignPattern/src/behavioral/chainRes">Code</a>
+  
+
+
 
 
 
