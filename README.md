@@ -2210,8 +2210,8 @@ public abstract class Employee implements LeaveApprover{
 - processRequest 메소드는 abstract으로 설정하여 후속객체가 반드시 정의해야한다. 반환값인 참/거짓을 통해 후속객체가 처리할 것인지 아닌지를 설정한다.
 
   
-- 후속객체1 Director
-  ```java
+- **Director**
+```java
   public class Director extends Employee {
 
 	public Director(LeaveApprover nextApprover) {
@@ -2229,11 +2229,12 @@ public abstract class Employee implements LeaveApprover{
 	
 }
 ```
+
 - 휴가타입이 PTO인 경우에만 휴가를 승인하도록 한다. 
 
 
 
-- 후속객체2 ProjectLead
+- **ProjectLead**
 ```java
 public class ProjectLead extends Employee{
 	
@@ -2258,7 +2259,7 @@ public class ProjectLead extends Employee{
 - ProjectLead는 휴가 타입이 Sick이고 이틀 미만의 경우만 true를 반환한다.
 - 해당 기준에 만족하지 않으면, ProjectLead의 ProcessRequest는 false를 반환하고, 후속객체가 있다면  Handler인터페이스가 후속객체로 요청을 전달한다.
 
-- Client 
+- **Client** 
 ```java
 public class Client {
 
