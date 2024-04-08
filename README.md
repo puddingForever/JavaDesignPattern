@@ -25,7 +25,7 @@ This is a repository for practicing design patterns that web developers should b
 ## 행위패턴(Behavioral Design Patterns) 
 > 행위패턴(Behavioral Design Pattern)이란 클래스나 객체들이 서로 상호작용하는 방법이나 책임 분배 방법을 정의하는 패턴이다.
 - [Chain of Responsibility Pattern](#ChainOfResponsibility)
-  
+- [Command Pattern](#CommandPattern)  
 
 <hr>
 
@@ -2304,7 +2304,22 @@ public void doFilter(ServletRequest request, ServletResponse response, FilterCha
 
 ### Code
 <a href="https://github.com/puddingForever/JavaDesignPattern/tree/main/JavaDesignPattern/src/behavioral/chainRes">Code</a>
-  
+
+<hr>
+
+# CommandPattern
+
+## Command Pattern ?  
+- request를 객체로 취급하여 command라는 객체에 캡슐화시킨다.
+- request에 있는 메소드가 객체안에 있기 때문에 실행을 늦출 수 있고(queue), 다른 코드에도 쉽게 전달할 수 있다.
+
+## UML
+![image](https://github.com/puddingForever/JavaDesignPattern/assets/126591306/347b779f-2ef4-41f8-911a-04fd11d07d7a)
+
+
+
+
+
 
 
 
