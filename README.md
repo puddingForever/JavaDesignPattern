@@ -2311,10 +2311,118 @@ public void doFilter(ServletRequest request, ServletResponse response, FilterCha
 
 ## Command Pattern ?  
 - request를 객체로 취급하여 command라는 객체에 캡슐화시킨다.
-- request에 있는 메소드가 객체안에 있기 때문에 실행을 늦출 수 있고(queue), 다른 코드에도 쉽게 전달할 수 있다.
+- 실행 메소드가 command 객체안에 있기 때문에 실행을 늦출 수 있고, 다른 코드에도 쉽게 전달할 수 있다.
 
 ## UML
 ![image](https://github.com/puddingForever/JavaDesignPattern/assets/126591306/347b779f-2ef4-41f8-911a-04fd11d07d7a)
+
+- Command : 실행될 기능에 대한 인터페이스. 실행되는 기능을 execute 메소드로 선언함
+- Concrete Command :  실제 명령 클래스. 작업을 수행하는데 필요한 모든 정보를 포함하고 Receiver객체와 연결된다. 
+- Invoker : 기능의 실행을 요청하는 호출자 클래스
+- Receiver : ConcreteCommand에서 execute 메소드를 구현할 떄 필요한 클래스, ConcreteCommand의 기능을 실행하기 위해 사용하는 수신자 클래스 
+- Client : 커맨드 객체 인스턴스를 생성하고, receiver를 설정한다.
+
+
+## 예시 
+주소란에 이메일 추가를 구현하는 코드이다.
+- **Command 인터페이스**
+```java
+public interface Command{
+	void execute();
+}
+```
+
+- **Command 구현클래스**
+- 이메일 추가기능이 들어있다. receiver가 전달되어야 실행된다.
+```java
+public class AddMEmberCommand implements Command{
+	private String emailAddress;
+	private String listName;
+
+	private EWSService receiver;
+
+	@Override
+	public void execute(){
+		receiver.addMember(listName,emailAddress);
+	}
+}
+```
+
+- **Receiver 클래스**
+- 실제 작업이 수행된다.
+```java
+public class EWSService{
+	public void addMember(String contact, String contactGroup){
+		System.out.println("Added "+contact +" to "+contactGroup);
+	}
+}
+```
+
+- **Invoker**
+- command 객체를 호출하는 worker thread가 시작된다.
+```java
+public class MailTasksRunner implements Runnable{
+
+//생략
+
+// 대기하는 command 객체를 실행시키는 worker thread 
+@Override
+	public void run() {
+
+		while (true) {
+			Command cmd = null;
+			synchronized (pendingCommands) {
+				if (pendingCommands.isEmpty()) {
+					try {
+						pendingCommands.wait();
+					} catch (InterruptedException e) {
+						System.out.println("Runner interrupted");
+						if (stop) {
+							System.out.println("Runner stopping");
+							return;
+						}
+					}
+				}
+				cmd = pendingCommands.isEmpty()?null:pendingCommands.remove(0);
+			}
+			if (cmd == null)
+				return;
+			cmd.execute();
+		}
+
+	}
+	
+
+	public void addCommand(Command cmd) {
+		synchronized (pendingCommands) {
+			pendingCommands.add(cmd);
+			pendingCommands.notifyAll();
+		}
+	}
+
+}
+``` 
+
+
+**client**
+```java
+public class Client{
+	public static void main(String[] args) throws InterruptedException{
+		EWSService service = new EWSService();
+
+		Command c1 = new AddMemberCommand("dddd@saf.com","spam",service);
+		MailTasksRunner.getInstance().addCommand(c1);
+
+		Thread.sleep(3000);
+		MailTasksRunner.getInstance().shutdown();
+	}
+}
+```
+
+## 결론
+Command Pattern은 실행되어야하는 작업을 캡슐화하고, 이 작업을 호출하는 객체와 실제 작업을 수행하는 객체 사이의 결합을 줄이는데 사용된다. <br>
+명령(Command)을 객체로 표현하고 이를 호출하는 Invoker 객체와 실제 작업을 수행하는 Receiver 객체로 구성된다.
+
 
 
 
