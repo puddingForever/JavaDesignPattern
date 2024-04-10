@@ -24,7 +24,8 @@ This is a repository for practicing design patterns that web developers should b
 ## 행위패턴(Behavioral Design Patterns) 
 > 행위패턴(Behavioral Design Pattern)이란 클래스나 객체들이 서로 상호작용하는 방법이나 책임 분배 방법을 정의하는 패턴이다.
 - [Chain of Responsibility Pattern](#ChainOfResponsibility)
-- [Command Pattern](#CommandPattern)  
+- [Command Pattern](#CommandPattern)
+- [Interpreter Pattern](#Interpreter)
 
 <hr>
 
