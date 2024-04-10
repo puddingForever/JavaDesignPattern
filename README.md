@@ -1,7 +1,6 @@
 # JavaDesignPattern
 
 This is a repository for practicing design patterns that web developers should be familiar with. <br> 
-웹개발자가 알아야할 디자인 패턴을 연습한 레포입니다. 
 
 ## 생성패턴(Creational Design Patterns) 
 > 생성패턴(Creational Design Pattern)이란 객체의 생성과 관련된 패턴으로, **객체의 생성절차를 추상화(flexibility and reuse of existing code)** 하는 패턴이다.
@@ -2313,6 +2312,8 @@ public void doFilter(ServletRequest request, ServletResponse response, FilterCha
 - request를 객체로 취급하여 command라는 객체에 캡슐화시킨다.
 - 실행 메소드가 command 객체안에 있기 때문에 실행을 늦출 수 있고, 다른 코드에도 쉽게 전달할 수 있다.
 
+
+
 ## UML
 ![image](https://github.com/puddingForever/JavaDesignPattern/assets/126591306/347b779f-2ef4-41f8-911a-04fd11d07d7a)
 
@@ -2323,118 +2324,165 @@ public void doFilter(ServletRequest request, ServletResponse response, FilterCha
 - Client : 커맨드 객체 인스턴스를 생성하고, receiver를 설정한다.
 
 
-## 예시 
-주소란에 이메일 추가를 구현하는 코드이다.
-- **Command 인터페이스**
+### Code
+<a href="https://github.com/puddingForever/JavaDesignPattern/tree/main/JavaDesignPattern/src/behavioral/command">Code</a>
+
+
+<hr>
+
+# Interpreter 
+
+## Interpreter Pattern 이란?
+- 특정 언어의 문법을 해석(Interprete)하고 실행해주는 역할을 한다.
+- 클래스들은 특정 언어의 문법을 표현하는 역할을 하고, 해당 언어를 해석하는데 도움을 준다.
+
+## UML 
+![image](https://github.com/puddingForever/JavaDesignPattern/assets/126591306/e3952e9c-0147-492b-9d8d-2d9ae8e005c7)
+- 추상적인 표현을 client가 구문을 이용하여 구체적인 표현들로 정의한다.
+- AbstractExpression 인터페이스는 context를 받아 해당 문장을 번역하는 기능을 제공한다.
+- TerminalExpression은 더 이상 분해되지 않는 최소 단위의 표현식이며, NonterminalExpression은 하나 이상의 터미널 또는 다른 비터미널 방식으로 표현된다.
+- Context는 AbstractExpression이 필요로하는 상태값을 가지고 있는 객체이다.
+
+
+## Example 
+예시코드는 사용자의 권한에 따라 Report에 접근권한을 부여하는 프로그램이다. <br>
+Report에 정의된 권한과 User의 권한을 비교하여 승인 여부를 결정한다. <br>
+
+- 사용자 객체이며, 권한리스트를 가지게 된다.
 ```java
-public interface Command{
-	void execute();
+public class User{
+
+	private List<String> permissions;
+
+	//생략
+
+	public User(String username, String... permissions){
+		this.permissions = new ArrayList<>();
+		Stream.of(permissions).forEach(e -> this.permissions.add(e.toLowerCase()));
+	}
 }
 ```
 
-- **Command 구현클래스**
-- 이메일 추가기능이 들어있다. receiver가 전달되어야 실행된다.
-```java
-public class AddMEmberCommand implements Command{
-	private String emailAddress;
-	private String listName;
 
-	private EWSService receiver;
+- Non Terminal Expression 객체이다.
+- 예를들어 사용자는 "NOT ADMIN" 과 "FINANCE_USER AND ADMIN"과 같은 Non terminal expression을 전달할 수 있다. 이때 각각의 단어 사이에 NOT이나 AND를 조합하여 해석되도록 만들어야한다. 
+<br>
+- 아래는 사용권한에 And가 추가될 수 있는지를 검사하는 AndExpression 클래스이다. 이는 builder패턴에서 사용된다.  
+```java
+public class AndExpression implements PermissionExpression{
+
+	private PermissionExpression expression1;
+	private PermissionExpression expression2;
+	
+	public AndExpression(PermissionExpression expression1, PermissionExpression expression2) {
+		this.expression1 = expression1;
+		this.expression2 = expression2;
+	}
+
+	
+	@Override
+	public boolean interpret(User user) {
+		return expression1.interpret(user) && expression2.interpret(user);
+	}
 
 	@Override
-	public void execute(){
-		receiver.addMember(listName,emailAddress);
-	}
-}
-```
-
-- **Receiver 클래스**
-- 실제 작업이 수행된다.
-```java
-public class EWSService{
-	public void addMember(String contact, String contactGroup){
-		System.out.println("Added "+contact +" to "+contactGroup);
-	}
-}
-```
-
-- **Invoker**
-- command 객체를 호출하는 worker thread가 시작된다.
-```java
-public class MailTasksRunner implements Runnable{
-
-//생략
-
-// 대기하는 command 객체를 실행시키는 worker thread 
-@Override
-	public void run() {
-
-		while (true) {
-			Command cmd = null;
-			synchronized (pendingCommands) {
-				if (pendingCommands.isEmpty()) {
-					try {
-						pendingCommands.wait();
-					} catch (InterruptedException e) {
-						System.out.println("Runner interrupted");
-						if (stop) {
-							System.out.println("Runner stopping");
-							return;
-						}
-					}
-				}
-				cmd = pendingCommands.isEmpty()?null:pendingCommands.remove(0);
-			}
-			if (cmd == null)
-				return;
-			cmd.execute();
-		}
-
+	public String toString() {
+		return expression1 + "And " + expression2;
 	}
 	
+}
+```
 
-	public void addCommand(Command cmd) {
-		synchronized (pendingCommands) {
-			pendingCommands.add(cmd);
-			pendingCommands.notifyAll();
+- ExpressionBuilder가 반환하는 것은 추상구문트리(abstract syntax tree,AST)이며, 이는 Stack 자료구조로 되어있다.
+- 추상구문트리(AST)란 프로그래밍 언어의 소스 코드를 구문적으로 분석하여 그 구조를 나타내는 트리 자료 구조이다.
+**parse()** : StringTokenizer는 빈칸을 기준으로 token이 생성되기 때문에 Report객체에  FINANCE_USER AND ADMIN이라고 입력될시 세개의 토큰이 생성된다<br>
+token에 non terminal expression이 포함되면, 해당 표현식을 stack에 저장한다.<br>
+**buildExpression()** : 저장된 표현식을 stack에서 제거하고, 표현식에 맞는 Non Terminal Expression 객체를 호출한다.<br>
+그 후 , permission 리스트에 사용될 non terminal expression 객체를 추가한다. 
+```java
+public class ExpressionBuilder{
+
+	private Stack<PermissionExpression> permissions = new Stack<>();
+
+	private Stack<String> operators = new Stack<>();
+
+	public PermissionExpression build(Report report){
+		parse(report.getPermission());
+		buildExpression();
+		if (permissions.size() > 1 || !operators.isEmpty()) {
+			System.out.println("ERROR!");
+		}
+		return permissions.pop();
+	}
+
+	private void parse(String permission){
+		StringTokenizer tokenizer = new StringTokenizer(permission.toLowerCase());
+		while(tokenizer.hasMoreTokens()){
+			String token;
+			switch((token = tokenizer.nextToken())){
+				case "and" :
+					operators.push("and");
+					break;
+				case "not" :
+					operators.push("not");
+					break;
+				case "or" :
+					operators.push("or");
+					break;
+				default :
+					permissions.push(new Permission(token));
+					break;
+			}
 		}
 	}
 
+	
+	private void buildExpressions() {
+		while (!operators.isEmpty()) {
+			String operator = operators.pop();
+			PermissionExpression perm1;
+			PermissionExpression perm2;
+			PermissionExpression exp;
+			switch (operator) {
+			case "not":
+				perm1 = permissions.pop();
+				exp = new NotExpression(perm1);
+				break;
+			case "and":
+				perm1 = permissions.pop();
+				perm2 = permissions.pop();
+				exp = new AndExpression(perm1, perm2);
+				break;
+			case "or":
+				perm1 = permissions.pop();
+				perm2 = permissions.pop();
+				exp = new OrExpression(perm1, perm2);
+				break;
+			default:
+				throw new IllegalArgumentException("Unknown operator:" + operator);
+			}
+			permissions.push(exp);
+		}
+
 }
-``` 
 
+```
 
-**client**
+**Client** 
+- 빌더패턴을 이용하여 Report의 abstract syntax tree를 반환한다.
 ```java
-public class Client{
-	public static void main(String[] args) throws InterruptedException{
-		EWSService service = new EWSService();
+Report report1 = new Report("Cashflow","NOT ADMIN");
+ExpressionBuilder builder = new ExpressionBuilder();
 
-		Command c1 = new AddMemberCommand("dddd@saf.com","spam",service);
-		MailTasksRunner.getInstance().addCommand(c1);
+//abstract syntax tree를 생성
+PermissionExpression exp = builder.build(report1);
+User u1 = new User("Dave","FINANCE_USER","ADMIN");
 
-		Thread.sleep(3000);
-		MailTasksRunner.getInstance().shutdown();
-	}
-}
+exp.interpret(u1); //false
 ```
 
 ## 결론
-Command Pattern은 실행되어야하는 작업을 캡슐화하고, 이 작업을 호출하는 객체와 실제 작업을 수행하는 객체 사이의 결합을 줄이는데 사용된다. <br>
-명령(Command)을 객체로 표현하고 이를 호출하는 Invoker 객체와 실제 작업을 수행하는 Receiver 객체로 구성된다.
+- 인터프리터 패턴은 문법 규칙을 나타내는 클래스를 정의하고, 이를 해석하여 실행할 수 있는 클래스를 만들어 구성한다
+- 단점으로는 문법의 수가 많아질 떄 이를 정의하는 클래스도 동시에 많아지게 된다. 따라서 복잡한 문법보다는 간단한 문법 규칙을 관리하는 것에 사용된다.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<a href="https://github.com/puddingForever/JavaDesignPattern/tree/main/JavaDesignPattern/src/behavioral/interpreter">code</code>
