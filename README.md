@@ -2350,6 +2350,7 @@ public void doFilter(ServletRequest request, ServletResponse response, FilterCha
 Report에 정의된 권한과 User의 권한을 비교하여 승인 여부를 결정한다. <br>
 
 - 사용자 객체이며, 권한리스트를 가지게 된다.
+
 ```java
 public class User{
 
@@ -2369,6 +2370,7 @@ public class User{
 - 예를들어 사용자는 "NOT ADMIN" 과 "FINANCE_USER AND ADMIN"과 같은 Non terminal expression을 전달할 수 있다. 이때 각각의 단어 사이에 NOT이나 AND를 조합하여 해석되도록 만들어야한다. 
 <br>
 - 아래는 사용권한에 And가 추가될 수 있는지를 검사하는 AndExpression 클래스이다. 이는 builder패턴에서 사용된다.  
+
 ```java
 public class AndExpression implements PermissionExpression{
 
@@ -2400,7 +2402,10 @@ public class AndExpression implements PermissionExpression{
 token에 non terminal expression이 포함되면, 해당 표현식을 stack에 저장한다.<br>
 **buildExpression()** : 저장된 표현식을 stack에서 제거하고, 표현식에 맞는 Non Terminal Expression 객체를 호출한다.<br>
 그 후 , permission 리스트에 사용될 non terminal expression 객체를 추가한다. 
+
+
 ```java
+
 public class ExpressionBuilder{
 
 	private Stack<PermissionExpression> permissions = new Stack<>();
