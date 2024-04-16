@@ -26,6 +26,7 @@ This is a repository for practicing design patterns that web developers should b
 - [Chain of Responsibility Pattern](#ChainOfResponsibility)
 - [Command Pattern](#CommandPattern)
 - [Interpreter Pattern](#Interpreter)
+- [Mediator Pattern](#Mediator)
 
 <hr>
 
@@ -2492,3 +2493,61 @@ exp.interpret(u1); //false
 - 단점으로는 문법의 수가 많아질 떄 이를 정의하는 클래스도 동시에 많아지게 된다. 따라서 복잡한 문법보다는 간단한 문법 규칙을 관리하는 것에 사용된다.
 
 <a href="https://github.com/puddingForever/JavaDesignPattern/tree/main/JavaDesignPattern/src/behavioral/interpreter">code</code>
+
+
+<hr>
+
+# Mediator 
+
+## Mediator Pattern
+- 모든 클래스 간의 복잡한 로직(상호작용)을 캡슐화하여 하나의 클래스에 위임하여 처리하는 패턴
+- M:N의 관계에서 M:1의 관계로 복잡도를 떨어뜨려 유지 보수 및 재사용의 확장성에 유리한 패턴
+- 커뮤니케이션이 복잡한 경우, 이를 해결해주어 커플링을 약화시켜주는 패턴이다.
+
+
+## UML 
+
+![image](https://github.com/puddingForever/JavaDesignPattern/assets/126591306/aa23c815-f4c5-4311-8a87-fec0b17f081c)
+
+- Mediator : Colleague 객체 간의 상호참조를 위한 인터페이스. 클라이언트 상태 등록, 실행 등의 메소드 정의
+- Colleague : 다른 Colleague 객체들과의 상호작용을 위한 인터페이스
+- ConcreteMediator : Mediator 구현클래스 , Colleague간의 상호참조를 조정
+- ConcreteColleage : Colleague 구현 클래스, Mediator를 통해 다른 Colleague와의 상호참조
+
+## Mediator 예시 
+
+- JavaUI를 책임지는 JavaFX를 이용해서 중재자패턴을 만들었다. 클라이언트는 Text,Label 등등 여러개의 UI 컴포넌트들을 변경하게 되는데, 상태를 변경하는 객체를 부를 때마다 각각의 객체들은 기존 상태값을 서로 전달받아야한다. 이렇게 변경할 때마다 컴포넌트끼리 현재 상태를 전달한다면 결합도가 높아진다. 이를 완화하기 위해 Mediator 객체를 만들어서 컴포넌트의 상태가 변경되면 Mediator 객체에게 변경된 값을 전달하고, Mediator 객체가 각각의 UI들에게 현재 객체의 상태를 전달한다.
+  
+
+- 아래는 Mediator 객체인 UIMediator이다. Mediator 객체는 상태값을 변경하는 객체들을 가지고 있어야하기 때문에 List로 담아두었고, 상태값이 변경되면 valueChagned 메소드를 이용하여 List에는 변경된 상태값으로 저장하고 Colleague역할을 하는 UIControl에 변경된 상태값을 전달한다. UIControl는 각각의 변경객체들의 인터페이스이기 떄문에, 어떤 객체든지 현재의 상태값을 알 수 있다. 즉 서로를 참조하지 않고도 UIControl을 이용하여 현재의 상태값을 알 수 있다.
+  
+```java
+public class UIMediator {
+	List<UIControl> colleagues = new ArrayList<>();
+
+	public void register(UIControl control){
+		colleagues.add(control);
+	}
+
+	public void valueChanged(UIControl control){
+		colleagues,stream().filter(c-> c!= control).forEach(c-> c.controlChanged(control));
+	}
+}
+```
+
+## Mediator Pattern VS Observer Pattern 
+- **Mediator**
+- 객체간의 복잡한 로직을 캡슐화 하는 것이 목적이다.
+- 각각의 객체 상태 변화를 모든 객체들이 알 수 있다. 
+- **Observer**
+- 객체끼리 일대다 관계의 결합도를 만드는 것에 있다(publish-subscribe 패턴)
+- 서로 상태를 공유하는 것이 목적이 아님 ! 개별적으로 객체 상태가 변화되도 다른 객체는 모름
+
+## 단점
+- 하나의 제어 객체만 있기 때문에, 상호작용해야하는 객체가 많아진다면 복잡도가 올라간다.
+
+### code 
+<a href="https://github.com/puddingForever/JavaDesignPattern/tree/main/JavaDesignPattern/src/behavioral/mediator">Code</a>
+
+
+  
