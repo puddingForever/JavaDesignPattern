@@ -29,6 +29,7 @@ This is a repository for practicing design patterns that web developers should b
 - [Mediator Pattern](#Mediator)
 - [Iterator Pattern](#Iterator)
 - [Memento Pattern](#Memento)
+- [Observer Pattern](#Observer)
 
 <hr>
 
@@ -2609,6 +2610,25 @@ int i  = sc.nextInt();
 
 ### Code
 <a href="https://github.com/puddingForever/JavaDesignPattern/tree/main/JavaDesignPattern/src/behavioral/memento">code</a>
+
+
+# Observer
+
+## Observer Pattern 이란? 
+- 객체의 상태 변화를 관찰하는 관찰자들(Observer) 목록을 이벤트를 발생시키는 이벤트 객체에 등록하여, 이벤트가 발생할 때마다 메소드를 통해 관찰자들(Observer) 객체들에게 알려주어 그에 맞게 행위를 하는 디자인 패턴이다.
+- publisher-subscriber 패턴이라고도 한다.
+- one-to-many
+  
+## UML 
+![image](https://github.com/puddingForever/JavaDesignPattern/assets/126591306/5f091491-43fd-4c4a-a7f6-ee2288cdbe52)
+Observer라는 인터페이스에는 notify()라는 함수가 정의되어있다. notify()는 이벤트가 발생했을 때 처리할 행위를 정의한다.
+Subject(이벤트 발생객체)에는 observerCollection이 존재하며, 여기에 Observer 객체들이 저장된다. notifyObserver()는 Observer 객체들의 목록들의 notify()를 실행해 이벤트 발생에 따른 처리를 각 Observer에게 전달한다. registerObserver(observer)는 observer를 등록, unregisterObserver(observer)는 특정 observer를 리스트에서 제거한다.
+
+
+### code
+<a href="https://github.com/puddingForever/JavaDesignPattern/tree/main/JavaDesignPattern/src/behavioral/observer">code</a>
+
+
 
 
 
