@@ -27,6 +27,8 @@ This is a repository for practicing design patterns that web developers should b
 - [Command Pattern](#CommandPattern)
 - [Interpreter Pattern](#Interpreter)
 - [Mediator Pattern](#Mediator)
+- [Iterator Pattern](#Iterator)
+- [Memento Pattern](#Memento)
 
 <hr>
 
@@ -2550,4 +2552,63 @@ public class UIMediator {
 <a href="https://github.com/puddingForever/JavaDesignPattern/tree/main/JavaDesignPattern/src/behavioral/mediator">Code</a>
 
 
+<hr>
+
+# Iterator
+
+## Iterator Pattern 이란?
+
+- 컬렉션 구현 방법을 노출시키지 않으면서도 그 집합체 안에 들어있는 모든 항목에 접근할 수 있는 방법을 제공한다.
+- 모든 항목에 일일이 접근하는 작업을 컬렉션 객체가 아닌 반복자 객체에서 맡게 된다.
+- 컬렉션 객체 안에 들어있는 모든 항목에 접근하는 방식이 통일되어 있으면 어떤 종류의 집합체에 대해서도 사용할 수 있는 다형적인 코드를 만들 수 있다.
+
+## UML 
+![image](https://github.com/puddingForever/JavaDesignPattern/assets/126591306/eb97a0c1-c42c-4547-8335-aea14d1dfc5b)
+- Collection 인터페이스는 List인터페이스에 의해 확장된다.
+- List인터페이스는 iterator()라는 팩토리 메소드를 가지고 있다. iterator 팩토리 메소드는 iterator 인터페이스를 반환한다.
+- List인터페이스에 구현되어있는 iterator 인스턴스들은 ListIterator로 불리운다.
+- ListIterator 인스턴스는 iterator 인터페이스의 구현체이며 Collection API에서 다양한 객체들을 어떻게 반복해야하는지를 알고 있다. 구성(Composition)과정에서 인터페이스를 정의한다.
+
+## 예시 
+java.util.Scanner 로 iterator 패턴으로 되어있다. InputStream은 stream을 통해 내부의 모든 바이트 항목에 접근할 수 있다.
+
+```java
+Scanner sc = new Scanner(System.in);
+// read an integer from input stream
+int i  = sc.nextInt();
+```
+
+### code 
+
+<a href="https://github.com/puddingForever/JavaDesignPattern/tree/main/JavaDesignPattern/src/behavioral/iterator">code</a>
+
+<hr>
+
+# Memento
+
+## Memento Pattern 이란?
+- 캡슐화를 유지하면서 객체 내부 상태를 외부에 저장하는 방법
+- 객체 상태를 외부에 저장했다가 해당 상태로 다시 복귀할 수 있다.
+
+## UML 
+
+![image](https://github.com/puddingForever/JavaDesignPattern/assets/126591306/b9378e12-8d7b-4081-80f4-1fa2248d4426)
+
+**Originator** : 클라이언트에게 request를 전달받으면, Originator가 memento 인스턴스를 만들어 현재 상태를 저장하거나 상태값을 복구한다.
+- 상태를 저장하라는 request인 경우 => Originator는 Memento 객체를 부르고, 현재 상태를 저장시킨다.
+- 상태를 복구하려는 request인 경우 => Originator는 원하는 상태를 가지고 있는 Memento 호출하여 상태를 복구시킴
+**Caretaker** : 클라이언트와 Originator의 중개자 역할이다. Memento 객체들을 관리함
+- 상태를 저장하라는 request인 경우 => Originator로 부터 Memento를 전달받아 Memento에 상태를 저장한다.
+- 상태를 복구하려는 request인 경우 => Originator에게 복구를 위한 Memento를 전달한다.
   
+
+## Memento VS Command 
+- Memento는 객체의 state(상태값을 저장하고) Command는 객체를 캡슐화(Encapsulation)시켜서 요청을 저장한다
+- Memento에서는 state가 originator를 제외하고 모두에게 감추어져있지만 Command에서는 state를 읽을 수 있다.
+  (실제로 Memento 패턴에서는 getter를 쓰면 안되지만 command에서는 제한이 없다) 
+
+### Code
+<a href="https://github.com/puddingForever/JavaDesignPattern/tree/main/JavaDesignPattern/src/behavioral/memento">code</a>
+
+
+
