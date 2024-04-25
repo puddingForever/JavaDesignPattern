@@ -30,6 +30,10 @@ This is a repository for practicing design patterns that web developers should b
 - [Iterator Pattern](#Iterator)
 - [Memento Pattern](#Memento)
 - [Observer Pattern](#Observer)
+- [State Pattern](#State)
+- [Strategy Pattern](#Strategy)
+- [Template Method Pattern](#TemplateMethod)
+- [VIsitor Pattern](#Visitor)
 
 <hr>
 
@@ -2627,6 +2631,114 @@ Subject(이벤트 발생객체)에는 observerCollection이 존재하며, 여기
 
 ### code
 <a href="https://github.com/puddingForever/JavaDesignPattern/tree/main/JavaDesignPattern/src/behavioral/observer">code</a>
+
+<hr>
+
+# State 
+
+## State Pattern이란?
+- 객체의 내부 상태가 바뀔 때마다 객체의 행동을 바꿀 수 있도록 도와주는 패턴이다. 마치 객체의 클래스가 바뀌는 것 처럼 보여줄 수 있다. 
+- 객체 상태를 별도 클래스로 캡슐화하여 현재 상태를 나타내는 객체에게 행동을 위임한다.
+- 내부 상태가 바뀔 때마다 행동이 달라진다는 사실을 쉽게 알 수 있다.
+- 메인 클래스를 수정하지 않고도 상태값을 자유롭게 추가할 수 있다. 
+
+## UML 
+![image](https://github.com/puddingForever/JavaDesignPattern/assets/126591306/c51f0070-f016-429e-8223-c45fecdf0424)
+
+- Document (=Context) : 모든 행동을 자체적으로 구현하는 대신, 현재 상태를 나타내는 상태 객체 하나를 참조해 그 상태 객체에게 행동을 위임한다.
+- State : 모든 구상 상태 클래스들이 구현해야하는 공통 인터페이스
+- Draft(=ConcreateState) : Document로 부터 전달된 요청을 상태별로 구현하여 처리한다.
+
+
+## 예시
+Order에 관련된 상태객체를 따로 빼서 설계했음. 메인 클래스를 건들지 않고 쉽게 상태값을 추가/삭제 할 수 있다. SRP를 준수했다고 볼 수 있다.
+<a href="https://github.com/puddingForever/JavaDesignPattern/tree/main/JavaDesignPattern/src/behavioral/state">Code </a>
+
+<hr>
+
+# Strategy 
+
+## 전략(Strategy)패턴이란 ?
+- 각 케이스에 따라 다른 알고리즘이 사용될 때
+- 케이스가 추가될 때마다 코드를 수정하는 것이 복잡해짐 => 케이스에 따란 알고리즘을 객체로 분리
+
+## UML 
+![image](https://github.com/puddingForever/JavaDesignPattern/assets/126591306/240080d7-0bb0-43cb-bf17-859b55f39777)
+- Strategy : 전략을 추상화시킨 인터페이스
+- Concrete Strategy : 각 케이스에 맞는 클래스로 구체적인 알고리즘을 제공
+- Context : Strategy를 실행시킴
+
+## Comparator 
+java.util.Comparator 인터페이스는 strategy 패턴으로 구현할 수 있다. Comparator는 각각의 구현체는 서로 다른 sorting 알고리즘을 구현할 수 있다. 
+객체의 나이(int)와 이름(String)에 따른 sorting을 시현할 때는 서로 데이터타입이 다르기 때문에 아래와 같은 다른 알고리즘으로 구현할 수 있다. 
+
+```java
+class SortByAge implements Comparator<User>{
+	@Override
+	public int compare(User o1,User o2){
+		return o1.getAge() - o2.getAge();
+	}
+}
+```
+
+```java
+class SortByName implements Comparator<User>{
+	@Override
+	public int compare(User o1, User o2){
+		return o1.getName().compareToIgnoreCase(o2.getName());
+	}
+}
+
+```
+
+
+
+## 예시
+OrderPrinter 라는 추상객체가 각각의 알고리즘들을 구현하고 있는 형태로 만들었다. 클라이언트는 사용하고 싶은 알고리즘의 객체를 생성자 인자값으로 넣어 원하는 메소드를 만들 수 있다. 
+<a href="https://github.com/puddingForever/JavaDesignPattern/tree/main/JavaDesignPattern/src/behavioral/strategy">Code </a>
+
+<hr>
+
+# TemplateMethod
+
+## 템플릿 메소드 패턴이란?
+슈퍼클래스에서 알고리즘에 대한 메소드의 뼈대(skeleton)만 작성하고, 서브클래스에서 해당 메소드를 상속(inheritance)받아 구체적인 구현을 재정의(overriding)하는 패턴이다. 소프트웨어 개발 원칙 중 DRY(Don't repeat yourself)에 해당한다. 즉 같은 코드를 중복되어 작성하지 말란 원칙이다. 템플릿 메소드 패턴은 동일한 알고리즘을 슈퍼 클래스에서 작성하기에 코드 중복을 최소화한다. 또한, 알고리즘을 바닥부터 다시 생성하지 않고, 서브 클래스를 새로 만들고 필요한 메소드만 재정의하면 됨으로 코드 추가 및 수정이 수월하다. 
+
+# UML 
+![image](https://github.com/puddingForever/JavaDesignPattern/assets/126591306/8f67fcd7-9b7a-41e6-b32c-4dfbcb7406a3)
+
+
+## 예시
+OrderPrinter를 abstract 클래스로 설정하고 이를 서브 클래스가 구현하게 했음. 특히 abstract 메소드들은 여러개의 작업으로 나누었기 때문에, 상위클래스를 건들지 않고 메소드를 단계별로 자유롭게 커스터마이징 할 수 있음 
+<a href="https://github.com/puddingForever/JavaDesignPattern/tree/main/JavaDesignPattern/src/behavioral/templatemethod">Code </a>
+
+<hr>
+
+# Visitor
+
+## 방문자 패턴이란?
+- OOP에서 객체는 그 객체가 하는 행동을 메소드로 가지고 있다. 예를 들어 "나는 상점에 방문했다. 나는 ~를 한다." 즉 '나'라는 객체는 '상점'이라는 객체를 입력받은 후 이 상점에 대해서 뭔가를 한다. 이것이 일반적인 OOP지만, Visitor 패턴에서는 "상점에 내가 방문을 했다. 내가~를 하게 한다" 라고 해석할 수 있다. '상점'이라는 객체가 '나'를 입력받은 후 , '나'라는 객체의 행동을 호출하는 것이다. 즉, 사용자는 방문자 입장이 아니라, 방문 공간의 입장에서 먼저 생각해보게 된다.
+- 각각의 클래스들의 데이터 구조에서 처리 기능을 분리하여 별도의 클래스로 구성하는 패턴이다. 이렇게 분리된 처리 기능은 각각의 클래스를 방문(visit)하여 수행한다.
+  
+
+- 
+## UML 
+![image](https://github.com/puddingForever/JavaDesignPattern/assets/126591306/ff6229b7-1a9c-439a-8f03-df607dffd474)
+
+- 데이터를 저장하는 Element와 알고리즘을 저장하는 Visitor를 분리시킨다. Visitor에 따라 여러 기능을 수행할 수 있다. 
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
